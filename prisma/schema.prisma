@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  username     String
+  password     String
+  deletedUsers User[]   @relation(name: "Users_Deleted_By_Admin")
+  SignUp       SignUp[] @relation(name: "Signups_Deleted_By_Admin")
+  createdAt    DateTime
+  updatedAt    DateTime
+}
+
+model User {
+  id           String    @id @default(uuid())
+  signUps      SignUp[]  @relation(name: "User_to_Signups")
+  defaultLogin LoginType @default(LOCAL)
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  deletedBy    Admin?    @relation(name: "Users_Deleted_By_Admin", fields: [deletedById], references: [id])
+  deletedById  String
+  createdAt    DateTime
+  updatedAt    DateTime
+}
+
+model SignUp {
+  id          String    @id @default(uuid())
+  type        LoginType @default(LOCAL)
+  username    String?
+  password    String?
+  avatar      String?
+  fullName    String?
+  email       String?
+  cell        String?
+  gender      Gender?
+  user        User      @relation(name: "User_to_Signups", fields: [userId], references: [id])
+  userId      String
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  deletedBy   Admin?    @relation(name: "Signups_Deleted_By_Admin", fields: [deletedById], references: [id])
+  deletedById String
+  createdAt   DateTime
+  updatedAt   DateTime
+}
+
+enum LoginType {
+  LOCAL
+  FACEBOOK
+  GOOGLE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  PREFER_NOT_TO_SAY
+}

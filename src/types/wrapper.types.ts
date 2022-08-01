@@ -1,0 +1,12 @@
+import { Response, NextFunction } from 'express';
+import { IRequest } from './extends.types';
+
+export interface ContextObject {
+	req: IRequest;
+	res: Response;
+	next: NextFunction;
+}
+
+export type Controller<T, S> = (root: object | null, args: T, context: ContextObject) => Promise<S>;
+
+export type ContextFunction = (req: IRequest, res: Response, next: NextFunction) => Promise<void>;
