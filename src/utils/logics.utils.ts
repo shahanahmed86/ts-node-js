@@ -14,3 +14,13 @@ export const convertUnknownIntoError = (err: unknown): HttpError => {
 
 	return error;
 };
+
+interface DeleteParams {
+	[key: string]: any;
+	isDeleted: boolean;
+	deletedAt: null;
+}
+type IncludeDeleteParams = (where: object) => DeleteParams;
+export const includeDeleteParams: IncludeDeleteParams = (where = {}) => {
+	return Object.assign(where, { isDeleted: false, deletedAt: null });
+};

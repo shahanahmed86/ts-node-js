@@ -3,9 +3,9 @@ import { IRequest } from '../../types/extends.types';
 import { ContextFunction } from '../../types/wrapper.types';
 import { BadRequest, convertUnknownIntoError, NotAuthenticated, NotAuthorized } from '../../utils';
 
-type KeyIds = 'userId' | 'adminId';
+type Key = 'userId' | 'adminId';
 type HasToken = (req: IRequest) => string | undefined;
-type ValidateToken = (req: IRequest, token: string, key: KeyIds) => Promise<void>;
+type ValidateToken = (req: IRequest, token: string, key: Key) => Promise<void>;
 
 const invalidSession: string = 'No Session or Invalid...';
 
@@ -34,7 +34,7 @@ export const guest: ContextFunction = async (req, res, next) => {
 	}
 };
 
-export const auth = (key: KeyIds): ContextFunction => {
+export const auth = (key: Key): ContextFunction => {
 	return async (req, res, next) => {
 		try {
 			const token = hasToken(req);

@@ -83,3 +83,34 @@
  *                     - type: object
  *                     - $ref: '#/components/schemas/Admin'
  */
+
+/**
+ * @openapi
+ * /api/admin/auth:
+ *   put:
+ *     summary: Returns change password success message
+ *     tags: [Admin_Authentications]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *                 description: old password
+ *                 example: shahan
+ *               password:
+ *                 type: string
+ *                 description: new password
+ *                 example: 123abc456
+ *     responses:
+ *       200:
+ *         description: Change password
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Password changed successfully
+ */

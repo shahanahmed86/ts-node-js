@@ -62,7 +62,7 @@ app.use(fileUpload({ limits: { fileSize: 5 * 1024 * 1024 } }));
 
 // logs
 morgan.token('host', os.hostname);
-app.use(morgan(':host :method :url :response-time'));
+app.use(morgan(':host :method :status :url :response-time'));
 
 // x-powered-by
 app.disable('x-powered-by');

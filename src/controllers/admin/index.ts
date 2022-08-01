@@ -1,3 +1,5 @@
 export * from './login.controller';
 
-export * from './logged-in.controller';
+export * from './loggedIn.controller';
+
+export * from './changePassword.controller';

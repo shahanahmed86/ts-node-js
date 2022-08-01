@@ -1,4 +1,4 @@
-import http, { RequestOptions, ClientRequest, IncomingMessage } from 'http';
+import http, { RequestOptions } from 'http';
 import { PORT } from '../src/config';
 
 const options: RequestOptions | string | URL = {
@@ -8,13 +8,13 @@ const options: RequestOptions | string | URL = {
 	path: '/api/healthcheck', // must be the same as HEALTHCHECK in Dockerfile
 };
 
-const request: ClientRequest = http.request(options, (res: IncomingMessage) => {
+const request = http.request(options, (res) => {
 	console.info('STATUS: ' + res.statusCode);
 	process.exitCode = res.statusCode === 200 ? 0 : 1;
 	process.exit();
 });
 
-request.on('error', (err: Error) => {
+request.on('error', (err) => {
 	console.error('ERROR', err);
 	process.exit(1);
 });

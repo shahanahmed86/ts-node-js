@@ -7,6 +7,7 @@ const router = Router();
 router
 	.route('/')
 	.get(middleware.auth('adminId'), restWrapper(adminController.loggedIn))
-	.post(middleware.guest, restWrapper(adminController.login));
+	.post(middleware.guest, restWrapper(adminController.login))
+	.put(middleware.auth('adminId'), restWrapper(adminController.changePassword));
 
 export default router;
