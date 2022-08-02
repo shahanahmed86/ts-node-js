@@ -15,6 +15,7 @@ export const restWrapper = (controller: any): ContextFunction => {
 		} catch (e) {
 			const error = convertUnknownIntoError(e);
 
+			req.error = error;
 			res.status(error.status).send(error.message);
 		} finally {
 			if (prisma) await prisma.$disconnect();

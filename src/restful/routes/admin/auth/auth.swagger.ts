@@ -65,7 +65,7 @@
  *               password:
  *                 type: string
  *                 description: password
- *                 example: shahan
+ *                 example: 123Abc456
  *     responses:
  *       200:
  *         description: Login
@@ -100,11 +100,11 @@
  *               oldPassword:
  *                 type: string
  *                 description: old password
- *                 example: shahan
+ *                 example: 123Abc456
  *               password:
  *                 type: string
  *                 description: new password
- *                 example: 123abc456
+ *                 example: 123aBc456
  *     responses:
  *       200:
  *         description: Change password

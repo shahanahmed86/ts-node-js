@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { adminController, middleware } from '../../../../controllers';
-import { restWrapper } from '../../../../utils';
+import { adminController } from '../../../../controllers';
+import { auth, guest } from '../../../../controllers/middleware/auth.middleware';
+import { restWrapper } from '../../../../utils/wrapper.utils';
 
 const router = Router();
 
 router
 	.route('/')
-	.get(middleware.auth('adminId'), restWrapper(adminController.loggedIn))
-	.post(middleware.guest, restWrapper(adminController.login))
-	.put(middleware.auth('adminId'), restWrapper(adminController.changePassword));
+	.get(auth('adminId'), restWrapper(adminController.loggedIn))
+	.post(guest, restWrapper(adminController.login))
+	.put(auth('adminId'), restWrapper(adminController.changePassword));
 
 export default router;

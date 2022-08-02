@@ -1,11 +1,12 @@
 import { decodePayload } from '../../library';
+import { KeyIds } from '../../types/common.types';
 import { IRequest } from '../../types/extends.types';
 import { ContextFunction } from '../../types/wrapper.types';
-import { BadRequest, convertUnknownIntoError, NotAuthenticated, NotAuthorized } from '../../utils';
+import { BadRequest, NotAuthenticated, NotAuthorized } from '../../utils/errors.utils';
+import { convertUnknownIntoError } from '../../utils/logics.utils';
 
-type Key = 'userId' | 'adminId';
 type HasToken = (req: IRequest) => string | undefined;
-type ValidateToken = (req: IRequest, token: string, key: Key) => Promise<void>;
+type ValidateToken = (req: IRequest, token: string, key: KeyIds) => Promise<void>;
 
 const invalidSession: string = 'No Session or Invalid...';
 
@@ -17,12 +18,14 @@ const validateToken: ValidateToken = async (req, tokenValue, key) => {
 	const [, token] = tokenValue.split(' ');
 
 	const payload = await decodePayload(token);
-	if (!payload || !(key in payload)) throw new NotAuthenticated(invalidSession);
+	if (!payload || !(key in payload) || !('exp' in payload)) {
+		throw new NotAuthenticated(invalidSession);
+	}
 
 	req[key] = payload[key];
 };
 
-export const guest: ContextFunction = async (req, res, next) => {
+export const guest: ContextFunction = (req, res, next) => {
 	try {
 		const token = hasToken(req);
 		if (token) throw new BadRequest('You are already logged in...');
@@ -30,11 +33,13 @@ export const guest: ContextFunction = async (req, res, next) => {
 		next();
 	} catch (e) {
 		const error = convertUnknownIntoError(e);
+
+		req.error = error;
 		res.status(error.status).send(error.message);
 	}
 };
 
-export const auth = (key: Key): ContextFunction => {
+export const auth = (key: KeyIds): ContextFunction => {
 	return async (req, res, next) => {
 		try {
 			const token = hasToken(req);
@@ -45,6 +50,8 @@ export const auth = (key: Key): ContextFunction => {
 			next();
 		} catch (e) {
 			const error = convertUnknownIntoError(e);
+
+			req.error = error;
 			res.status(error.status).send(error.message);
 		}
 	};

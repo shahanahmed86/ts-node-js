@@ -2,6 +2,13 @@ export class HttpError extends Error {
 	public status!: number;
 }
 
+export class NotFound extends HttpError {
+	constructor(message: string = 'Not Found') {
+		super(message);
+		this.status = 404;
+	}
+}
+
 export class BadRequest extends HttpError {
 	constructor(message: string = 'Bad Request') {
 		super(message);

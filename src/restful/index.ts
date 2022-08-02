@@ -1,6 +1,5 @@
 import os from 'os';
 import express, { Application } from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import swaggerUI from 'swagger-ui-express';
@@ -8,8 +7,9 @@ import swaggerUI from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import { name } from '../..//package.json';
 import { IN_PROD } from '../config';
-import { notFound } from '../controllers/middleware';
+import { notFound } from '../controllers/middleware/errors.middleware';
 import routes from './routes';
+import { logger } from '../library';
 
 // initiate express app;
 const app: Application = express();
@@ -61,8 +61,7 @@ app.use(cors());
 app.use(fileUpload({ limits: { fileSize: 5 * 1024 * 1024 } }));
 
 // logs
-morgan.token('host', os.hostname);
-app.use(morgan(':host :method :status :url :response-time'));
+app.use(logger);
 
 // x-powered-by
 app.disable('x-powered-by');

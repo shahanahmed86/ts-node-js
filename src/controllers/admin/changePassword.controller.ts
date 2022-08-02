@@ -1,6 +1,8 @@
 import { compareSync, hashSync, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
-import { ConflictError, NotAuthorized } from '../../utils';
+import { ConflictError, NotAuthorized } from '../../utils/errors.utils';
+import { joiValidator } from '../../utils/logics.utils';
+import { changePasswordSchema } from '../../validation';
 
 interface Args {
 	oldPassword: string;
@@ -8,9 +10,7 @@ interface Args {
 }
 
 export const changePassword: Controller<Args, string> = async (root, args, { req }) => {
-	if (!args.oldPassword.trim() || !args.password.trim()) {
-		throw new ConflictError('Old and new passwords cannot be empty...');
-	}
+	await joiValidator(changePasswordSchema, args);
 
 	if (args.oldPassword === args.password) {
 		throw new ConflictError('Old and new passwords are same...');

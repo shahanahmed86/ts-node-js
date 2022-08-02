@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import { compareSync, encodePayload, Prisma, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
-import { NotAuthenticated, SHOULD_OMIT_PROPS } from '../../utils';
+import { NotAuthenticated } from '../../utils/errors.utils';
+import { SHOULD_OMIT_PROPS } from '../../utils/constants.utils';
+import { joiValidator } from '../../utils/logics.utils';
+import { adminLoginSchema } from '../../validation';
 
 interface Args {
 	username: string;
@@ -16,9 +19,7 @@ interface Response {
 const notAuthenticated: string = 'Username or password is incorrect';
 
 export const login: Controller<Args, Response> = async (root, args) => {
-	if (!args.username.trim() || !args.password.trim()) {
-		throw new NotAuthenticated('Username and Password cannot be empty...');
-	}
+	await joiValidator(adminLoginSchema, args);
 
 	const params: Prisma.AdminFindFirstArgs = { where: { username: args.username } };
 	const admin = await prisma.admin.findFirst(params);

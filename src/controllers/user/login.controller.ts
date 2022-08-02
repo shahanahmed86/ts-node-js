@@ -1,10 +1,14 @@
 import _ from 'lodash';
 import { compareSync, encodePayload, Prisma, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
-import { includeDeleteParams, NotAuthenticated, SHOULD_OMIT_PROPS } from '../../utils';
+import { NotAuthenticated } from '../../utils/errors.utils';
+import { includeDeleteParams, joiValidator } from '../../utils/logics.utils';
+import { SHOULD_OMIT_PROPS } from '../../utils/constants.utils';
+import { LoginType } from '../../types/common.types';
+import { userLoginSchema } from '../../validation';
 
 interface Args {
-	loginType: 'LOCAL' | 'FACEBOOK' | 'GOOGLE';
+	loginType: LoginType;
 	username: string;
 	password: string;
 }
@@ -17,9 +21,7 @@ interface Response {
 const notAuthenticated: string = 'Username or password is incorrect';
 
 export const login: Controller<Args, Response> = async (root, args) => {
-	if (!args.username.trim() || !args.password.trim()) {
-		throw new NotAuthenticated('Username and Password cannot be empty...');
-	}
+	await joiValidator(userLoginSchema, args);
 
 	const { loginType, username, password } = args;
 	const signUpParams: Prisma.SignUpFindFirstArgs = {

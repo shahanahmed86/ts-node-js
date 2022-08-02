@@ -9,4 +9,8 @@ export interface ContextObject {
 
 export type Controller<T, S> = (root: object | null, args: T, context: ContextObject) => Promise<S>;
 
-export type ContextFunction = (req: IRequest, res: Response, next: NextFunction) => Promise<void>;
+export type ContextFunction = (
+	req: IRequest,
+	res: Response,
+	next: NextFunction,
+) => void | Promise<void>;

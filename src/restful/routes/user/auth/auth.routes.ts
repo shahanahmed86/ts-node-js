@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { middleware, userController } from '../../../../controllers';
-import { restWrapper } from '../../../../utils';
+import { userController } from '../../../../controllers';
+import { guest } from '../../../../controllers/middleware/auth.middleware';
+import { restWrapper } from '../../../../utils/wrapper.utils';
 
 const router = Router();
 
-router.route('/').post(middleware.guest, restWrapper(userController.login));
+router.route('/').post(guest, restWrapper(userController.login));
 
 export default router;

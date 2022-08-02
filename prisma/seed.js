@@ -17,7 +17,7 @@ const getZeroTimeZone = (value = new Date()) => value.toISOString();
 		let user = await prisma.admin.findFirst({ where: { username } });
 		if (!user) {
 			const now = getZeroTimeZone(),
-				password = hashPassword(username),
+				password = hashPassword('123Abc456'),
 				createdAt = now,
 				updatedAt = now;
 			const data = { username, password, createdAt, updatedAt };

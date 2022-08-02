@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
+import { KeyIds } from '../types/common.types';
 
 interface IVerifiedUser {
 	adminId?: string;
@@ -8,11 +9,11 @@ interface IVerifiedUser {
 	exp: number;
 }
 
-type EncodePayload = (id: string, key: string) => string;
+type EncodePayload = (payload: string, key: KeyIds) => string;
 type DecodePayload = (token: string) => Promise<IVerifiedUser>;
 
-export const encodePayload: EncodePayload = (id, key) => {
-	return jwt.sign({ [key]: id }, JWT_SECRET, { expiresIn: '1h' });
+export const encodePayload: EncodePayload = (payload, key) => {
+	return jwt.sign({ [key]: payload }, JWT_SECRET, { expiresIn: '1h' });
 };
 
 export const decodePayload: DecodePayload = (token) => {

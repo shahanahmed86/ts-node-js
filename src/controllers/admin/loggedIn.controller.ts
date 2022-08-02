@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Prisma, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
-import { NotAuthorized } from '../../utils';
+import { NotAuthorized } from '../../utils/errors.utils';
 
 interface Args {
 	token: string;
