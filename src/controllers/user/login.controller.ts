@@ -18,25 +18,24 @@ interface Response {
 	payload: object;
 }
 
-const notAuthenticated: string = 'Username or password is incorrect';
+const notAuthenticated: string = 'username or password is incorrect';
 
 export const login: Controller<Args, Response> = async (root, args) => {
 	await joiValidator(userLoginSchema, args);
 
-	const { loginType, username, password } = args;
-	const signUpParams: Prisma.SignUpFindFirstArgs = {
+	const { loginType = 'LOCAL', username, password } = args;
+	const findArgs: Prisma.SignUpFindFirstArgs = {
 		where: includeDeleteParams({
 			username,
-			password,
 			type: loginType,
 			user: includeDeleteParams({ defaultLogin: loginType } as Prisma.UserWhereInput),
 		} as Prisma.SignUpWhereInput),
 	};
 
-	const signUp = await prisma.signUp.findFirst(signUpParams);
+	const signUp = await prisma.signUp.findFirst(findArgs);
 	if (!signUp) throw new NotAuthenticated(notAuthenticated);
 
-	const isMatch = compareSync(args.password, signUp.password as string);
+	const isMatch = compareSync(password, signUp.password as string);
 	if (!isMatch) throw new NotAuthenticated(notAuthenticated);
 
 	const token = encodePayload(signUp.userId, 'userId');

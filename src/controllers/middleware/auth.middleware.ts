@@ -8,7 +8,7 @@ import { convertUnknownIntoError } from '../../utils/logics.utils';
 type HasToken = (req: IRequest) => string | undefined;
 type ValidateToken = (req: IRequest, token: string, key: KeyIds) => Promise<void>;
 
-const invalidSession: string = 'No Session or Invalid...';
+const invalidSession: string = 'no session or invalid...';
 
 const hasToken: HasToken = (req) => req.headers.authorization;
 

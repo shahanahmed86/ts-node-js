@@ -19,8 +19,3 @@ export const changePasswordSchema = Joi.object({
 		'any.invalid': '{#label} cannot be same as old one',
 	}),
 });
-
-export const loginType = Joi.string()
-	.valid(...LOGIN_TYPES)
-	.label('login type')
-	.disallow('');

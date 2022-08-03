@@ -16,7 +16,7 @@ interface Response {
 	payload: object;
 }
 
-const notAuthenticated: string = 'Username or password is incorrect';
+const notAuthenticated: string = 'username or password is incorrect';
 
 export const login: Controller<Args, Response> = async (root, args) => {
 	await joiValidator(adminLoginSchema, args);

@@ -12,14 +12,14 @@ interface Args {
 export const changePassword: Controller<Args, string> = async (root, args, { req }) => {
 	await joiValidator(changePasswordSchema, args);
 
-	const admin = await prisma.admin.findFirst({ where: { id: req.userId } });
-	if (!admin) throw new NotAuthorized();
+	const user = await prisma.user.findFirst({ where: { id: req.userId } }).signUps();
+	if (!user || user.defaultLogin !== 'LOCAL') throw new NotAuthorized();
 
-	const isMatch = compareSync(args.oldPassword, admin.password);
+	const isMatch = compareSync(args.oldPassword, user.password);
 	if (!isMatch) throw new ConflictError('old password mismatched...');
 
 	const password = hashSync(args.password);
-	await prisma.admin.update({ where: { id: admin.id }, data: { password } });
+	await prisma.user.update({ where: { id: user.id }, data: { password } });
 
 	return 'password changed successfully';
 };

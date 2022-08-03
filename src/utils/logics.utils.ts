@@ -5,7 +5,7 @@ import { BadRequest, HttpError } from './errors.utils';
 type GetMillSeconds = (value: number) => number;
 export const getMillSeconds: GetMillSeconds = (value = Date.now()) => new Date(value).getTime();
 
-type GetZeroTimeZone = (value: Date) => string;
+type GetZeroTimeZone = (value?: Date) => string;
 export const getZeroTimeZone: GetZeroTimeZone = (value = new Date()) => value.toISOString();
 
 export const convertUnknownIntoError = (err: unknown | any): HttpError => {
