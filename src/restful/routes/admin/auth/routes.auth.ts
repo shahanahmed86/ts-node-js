@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { adminController } from '../../../../controllers';
-import { auth, guest } from '../../../../controllers/middleware/auth.middleware';
 import { restWrapper } from '../../../../utils/wrapper.utils';
+import { auth, guest } from '../../../middleware/auth.middleware';
 
 const router = Router();
 

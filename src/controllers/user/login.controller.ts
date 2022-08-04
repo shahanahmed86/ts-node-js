@@ -1,46 +1,46 @@
-import _ from 'lodash';
 import { compareSync, encodePayload, Prisma, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { NotAuthenticated } from '../../utils/errors.utils';
-import { includeDeleteParams, joiValidator } from '../../utils/logics.utils';
-import { SHOULD_OMIT_PROPS } from '../../utils/constants.utils';
-import { LoginType } from '../../types/common.types';
+import { includeDeleteParams, joiValidator, omitProps } from '../../utils/logics.utils';
 import { userLoginSchema } from '../../validation';
 
-interface Args {
-	loginType: LoginType;
+type Args = {
 	username: string;
 	password: string;
-}
+};
 
-interface Response {
+type Result = {
 	token: string;
-	payload: object;
-}
+	payload: Prisma.UserWhereInput;
+};
 
-const notAuthenticated: string = 'username or password is incorrect';
+const notAuthenticated = 'username or password is incorrect';
 
-export const login: Controller<Args, Response> = async (root, args) => {
+export const login: Controller<Args, Result> = async (root, args) => {
 	await joiValidator(userLoginSchema, args);
 
-	const { loginType = 'LOCAL', username, password } = args;
-	const findArgs: Prisma.SignUpFindFirstArgs = {
-		where: includeDeleteParams({
-			username,
-			type: loginType,
-			user: includeDeleteParams({ defaultLogin: loginType } as Prisma.UserWhereInput),
-		} as Prisma.SignUpWhereInput),
-	};
+	const { username, password } = args;
 
-	const signUp = await prisma.signUp.findFirst(findArgs);
+	const userWhere: Prisma.UserWhereInput = includeDeleteParams({ defaultLogin: 'LOCAL' });
+	const where: Prisma.SignUpWhereInput = includeDeleteParams({
+		username,
+		type: 'LOCAL',
+		user: userWhere,
+	});
+
+	const signUp = await prisma.signUp.findFirst({ where, include: { user: true } });
 	if (!signUp) throw new NotAuthenticated(notAuthenticated);
 
-	const isMatch = compareSync(password, signUp.password as string);
-	if (!isMatch) throw new NotAuthenticated(notAuthenticated);
+	if (signUp.password) {
+		const isMatch = compareSync(password, signUp.password);
+		if (!isMatch) throw new NotAuthenticated(notAuthenticated);
+	}
 
 	const token = encodePayload(signUp.userId, 'userId');
+	const payload: Prisma.SignUpWhereInput = omitProps(signUp);
+	payload.user = omitProps(signUp.user);
 
-	const payload = _.omit(signUp, SHOULD_OMIT_PROPS);
+	const result: Result = { token, payload };
 
-	return { token, payload };
+	return result;
 };

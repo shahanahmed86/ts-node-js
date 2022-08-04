@@ -1,6 +1,7 @@
+import _ from 'lodash';
 import { ObjectSchema } from 'joi';
-import { IncludeDeleteParams } from '../types/common.types';
 import { BadRequest, HttpError } from './errors.utils';
+import { SHOULD_OMIT_PROPS } from './constants.utils';
 
 type GetMillSeconds = (value: number) => number;
 export const getMillSeconds: GetMillSeconds = (value = Date.now()) => new Date(value).getTime();
@@ -16,16 +17,18 @@ export const convertUnknownIntoError = (err: unknown | any): HttpError => {
 	else if (err instanceof Error) error = new BadRequest(err.message);
 	else error = new BadRequest();
 
-	// this will remove inverted commas from an error string...
+	// this will remove inverted commas from an error string
 	error.message = error.message.replace(/['"]+/g, '');
 
 	return error;
 };
 
-export const includeDeleteParams: IncludeDeleteParams = (where = {}) => {
+export function includeDeleteParams<T>(where: T): T {
 	return Object.assign(where, { isDeleted: false, deletedAt: null });
-};
+}
 
-export const joiValidator = async (schema: ObjectSchema, payload: any) => {
+export const joiValidator = (schema: ObjectSchema, payload: any): Promise<any> => {
 	return schema.validateAsync(payload, { abortEarly: false });
 };
+
+export const omitProps = (obj: object, props?: string[]) => _.omit(obj, props || SHOULD_OMIT_PROPS);

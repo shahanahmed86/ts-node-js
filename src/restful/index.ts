@@ -7,7 +7,7 @@ import swaggerUI from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import { name } from '../..//package.json';
 import { IN_PROD } from '../config';
-import { notFound } from '../controllers/middleware/errors.middleware';
+import { notFound } from './middleware/errors.middleware';
 import routes from './routes';
 import { logger } from '../library';
 
@@ -40,7 +40,7 @@ if (!IN_PROD) {
 				},
 			],
 		},
-		apis: ['./src/restful/routes/**/*.swagger.ts'], // files containing annotations as above
+		apis: ['./src/restful/routes/**/swagger.*.ts'], // files containing annotations as above
 	};
 
 	// swagger setup

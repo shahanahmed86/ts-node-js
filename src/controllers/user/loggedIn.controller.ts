@@ -1,23 +1,31 @@
-import _ from 'lodash';
 import { Prisma, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
-import { SHOULD_OMIT_PROPS } from '../../utils/constants.utils';
-import { NotAuthorized } from '../../utils/errors.utils';
+import { ConflictError, NotAuthorized } from '../../utils/errors.utils';
+import { includeDeleteParams, omitProps } from '../../utils/logics.utils';
 
-interface Args {
-	token: string;
-}
+type Result = Prisma.SignUpWhereInput;
 
-export const loggedIn: Controller<Args, object> = async (root, args, { req }) => {
+export const loggedIn: Controller<object, Result> = async (root, args, { req }) => {
+	if (!req.userId) throw new NotAuthorized();
+
 	const userWhereInput: Prisma.UserWhereInput = { id: req.userId };
 	const user = await prisma.user.findFirst({ where: userWhereInput });
 	if (!user) throw new NotAuthorized();
 
-	const signUpWhereInput: Prisma.SignUpWhereInput = { userId: user.id, type: user.defaultLogin };
-	const signUp = await prisma.signUp.findFirst({ where: signUpWhereInput });
-	if (!signUp) throw new NotAuthorized();
+	const signUpWhereInput: Prisma.SignUpWhereInput = includeDeleteParams({
+		userId: user.id,
+		type: user.defaultLogin,
+	});
+	const signUp = await prisma.signUp.findFirst({
+		where: signUpWhereInput,
+		include: { user: true },
+	});
+	if (!signUp) {
+		throw new ConflictError(`You can login with ${user.defaultLogin.toLowerCase()} credentials`);
+	}
 
-	const payload = _.omit(signUp, SHOULD_OMIT_PROPS);
+	const payload: Result = omitProps(signUp);
+	payload.user = omitProps(signUp.user);
 
 	return payload;
 };

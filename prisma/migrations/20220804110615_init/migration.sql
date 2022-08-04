@@ -15,7 +15,7 @@ CREATE TABLE `User` (
     `defaultLogin` ENUM('LOCAL', 'FACEBOOK', 'GOOGLE') NOT NULL DEFAULT 'LOCAL',
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `deletedAt` DATETIME(3) NULL,
-    `deletedById` VARCHAR(191) NOT NULL,
+    `deletedById` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -36,7 +36,7 @@ CREATE TABLE `SignUp` (
     `userId` VARCHAR(191) NOT NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `deletedAt` DATETIME(3) NULL,
-    `deletedById` VARCHAR(191) NOT NULL,
+    `deletedById` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -44,10 +44,10 @@ CREATE TABLE `SignUp` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `User` ADD CONSTRAINT `User_deletedById_fkey` FOREIGN KEY (`deletedById`) REFERENCES `Admin`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `User` ADD CONSTRAINT `User_deletedById_fkey` FOREIGN KEY (`deletedById`) REFERENCES `Admin`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `SignUp` ADD CONSTRAINT `SignUp_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `SignUp` ADD CONSTRAINT `SignUp_deletedById_fkey` FOREIGN KEY (`deletedById`) REFERENCES `Admin`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `SignUp` ADD CONSTRAINT `SignUp_deletedById_fkey` FOREIGN KEY (`deletedById`) REFERENCES `Admin`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

@@ -1,36 +1,36 @@
-import _ from 'lodash';
 import { compareSync, encodePayload, Prisma, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { NotAuthenticated } from '../../utils/errors.utils';
-import { SHOULD_OMIT_PROPS } from '../../utils/constants.utils';
-import { joiValidator } from '../../utils/logics.utils';
+import { joiValidator, omitProps } from '../../utils/logics.utils';
 import { adminLoginSchema } from '../../validation';
 
-interface Args {
+type Args = {
 	username: string;
 	password: string;
-}
+};
 
-interface Response {
+type Result = {
 	token: string;
-	payload: object;
-}
+	payload: Prisma.AdminWhereInput;
+};
 
 const notAuthenticated: string = 'username or password is incorrect';
 
-export const login: Controller<Args, Response> = async (root, args) => {
+export const login: Controller<Args, Result> = async (root, args) => {
 	await joiValidator(adminLoginSchema, args);
 
-	const params: Prisma.AdminFindFirstArgs = { where: { username: args.username } };
-	const admin = await prisma.admin.findFirst(params);
+	const { username, password } = args;
+
+	const admin = await prisma.admin.findFirst({ where: { username } });
 	if (!admin) throw new NotAuthenticated(notAuthenticated);
 
-	const isMatch = compareSync(args.password, admin.password);
+	const isMatch = compareSync(password, admin.password);
 	if (!isMatch) throw new NotAuthenticated(notAuthenticated);
 
 	const token = encodePayload(admin.id, 'adminId');
+	const payload = omitProps(admin);
 
-	const payload = _.omit(admin, SHOULD_OMIT_PROPS);
+	const result: Result = { token, payload };
 
-	return { token, payload };
+	return result;
 };

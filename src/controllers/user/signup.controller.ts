@@ -1,13 +1,16 @@
-import _ from 'lodash';
 import { encodePayload, hashSync, Prisma, prisma } from '../../library';
 import { GenderType } from '../../types/common.types';
 import { Controller } from '../../types/wrapper.types';
-import { SHOULD_OMIT_PROPS } from '../../utils/constants.utils';
 import { ConflictError } from '../../utils/errors.utils';
-import { getZeroTimeZone, includeDeleteParams, joiValidator } from '../../utils/logics.utils';
+import {
+	getZeroTimeZone,
+	includeDeleteParams,
+	joiValidator,
+	omitProps,
+} from '../../utils/logics.utils';
 import { userSignUpSchema } from '../../validation';
 
-interface Args {
+type Args = {
 	username: string;
 	password: string;
 	avatar?: string;
@@ -15,50 +18,51 @@ interface Args {
 	email?: string;
 	cell?: string;
 	gender?: GenderType;
-}
+};
 
-interface Response {
+type Result = {
 	token: string;
-	payload: object;
-}
+	payload: Prisma.SignUpWhereInput;
+};
 
-export const signUp: Controller<Args, Response> = async (root, args) => {
+export const register: Controller<Args, Result> = async (root, args) => {
 	await joiValidator(userSignUpSchema, args);
 
-	const findArgs: Prisma.SignUpFindFirstArgs = {
-		where: includeDeleteParams({
-			username: args.username,
-			type: 'LOCAL',
-		} as Prisma.SignUpWhereInput),
-	};
-	const signedUpUser = await prisma.signUp.findFirst(findArgs);
+	const where: Prisma.SignUpWhereInput = includeDeleteParams({
+		username: args.username,
+		type: 'LOCAL',
+	});
+	const signedUpUser = await prisma.signUp.findFirst({ where });
 	if (signedUpUser) throw new ConflictError('user with this name is already exists');
 
 	const now = getZeroTimeZone();
 
-	const data: Prisma.UserCreateInput = {
+	const data: Prisma.SignUpCreateInput = {
 		createdAt: now,
 		updatedAt: now,
-		signUps: {
+		avatar: args.avatar,
+		cell: args.cell,
+		email: args.email,
+		fullName: args.fullName,
+		gender: args.gender,
+		username: args.username,
+		password: hashSync(args.password),
+		user: {
 			create: {
 				createdAt: now,
 				updatedAt: now,
-				avatar: args.avatar,
-				cell: args.cell,
-				email: args.email,
-				fullName: args.fullName,
-				gender: args.gender,
-				username: args.username,
-				password: hashSync(args.password),
 			},
 		},
 	};
 
-	const [user] = await prisma.user.create({ data }).signUps({ where: { type: 'LOCAL' } });
+	const signUp = await prisma.signUp.create({ data, include: { user: true } });
 
-	const token = encodePayload(user.userId, 'userId');
+	const token = encodePayload(signUp.userId, 'userId');
 
-	const payload = _.omit(user, SHOULD_OMIT_PROPS);
+	const payload: Prisma.SignUpWhereInput = omitProps(signUp);
+	payload.user = omitProps(signUp.user);
 
-	return { token, payload };
+	const result: Result = { token, payload };
+
+	return result;
 };

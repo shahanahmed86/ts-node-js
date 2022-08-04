@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import { BCRYPT_MAX_BYTES } from '../config';
-import { LOGIN_TYPES } from '../utils/constants.utils';
 
 export const usernameSchema = Joi.string().min(3).max(20).trim().label('username');
 export const passwordSchema = Joi.string()
@@ -10,7 +9,7 @@ export const passwordSchema = Joi.string()
 	.regex(/^(?=.*?[\p{Lu}])(?=.*?[\p{Ll}])(?=.*?\d).*$/u)
 	.label('password')
 	.messages({
-		'string.pattern.base': '{#label} must contain at least one uppercase/lowercase/digit...',
+		'string.pattern.base': '{#label} must contain at least one uppercase/lowercase/digit',
 	});
 
 export const changePasswordSchema = Joi.object({
