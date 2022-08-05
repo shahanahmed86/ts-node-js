@@ -10,7 +10,7 @@ type Args = {
 	password: string;
 };
 
-export const changePassword: Controller<Args, string> = async (root, args, { req }) => {
+export const changePassword: Controller<null, Args, string> = async (root, args, { req }) => {
 	if (!req.userId) throw new NotAuthorized();
 
 	await joiValidator(changePasswordSchema, args);

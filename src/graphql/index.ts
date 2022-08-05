@@ -1,28 +1,5 @@
-import { gql } from 'apollo-server-express';
+export { default as typeDefs } from './typeDefs';
 
-export const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-  type Query {
-    books: [Book]
-  }
-`;
+export { default as resolvers } from './resolvers';
 
-export const books = [
-	{
-		title: 'The Awakening',
-		author: 'Kate Chopin',
-	},
-	{
-		title: 'City of Glass',
-		author: 'Paul Auster',
-	},
-];
-
-export const resolvers = {
-	Query: {
-		books: () => books,
-	},
-};
+export { default as directives } from './directives';

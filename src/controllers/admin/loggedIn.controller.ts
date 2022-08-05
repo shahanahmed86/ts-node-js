@@ -5,7 +5,7 @@ import { omitProps } from '../../utils/logics.utils';
 
 type Result = Prisma.AdminWhereInput;
 
-export const loggedIn: Controller<object, Result> = async (root, args, { req }) => {
+export const loggedIn: Controller<null, object, Result> = async (root, args, { req }) => {
 	if (!req.adminId) throw new NotAuthorized();
 
 	const admin = await prisma.admin.findFirst({ where: { id: req.adminId } });

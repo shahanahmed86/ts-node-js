@@ -1,4 +1,5 @@
 import { Response, NextFunction } from 'express';
+import { GraphQLResolveInfo } from 'graphql';
 import { IRequest } from './extends.types';
 
 export type ContextObject = {
@@ -7,7 +8,12 @@ export type ContextObject = {
 	next: NextFunction;
 };
 
-export type Controller<T, S> = (root: object | null, args: T, context: ContextObject) => Promise<S>;
+export type Controller<R, A, C> = (
+	root: R,
+	args: A,
+	context: ContextObject,
+	info?: GraphQLResolveInfo,
+) => Promise<C>;
 
 export type ContextFunction = (
 	req: IRequest,

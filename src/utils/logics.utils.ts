@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { ObjectSchema } from 'joi';
 import { BadRequest, HttpError } from './errors.utils';
 import { SHOULD_OMIT_PROPS } from './constants.utils';
+import { GetUserType } from '../types/common.types';
 
 type GetMillSeconds = (value: number) => number;
 export const getMillSeconds: GetMillSeconds = (value = Date.now()) => new Date(value).getTime();
@@ -32,3 +33,13 @@ export const joiValidator = (schema: ObjectSchema, payload: any): Promise<any> =
 };
 
 export const omitProps = (obj: object, props?: string[]) => _.omit(obj, props || SHOULD_OMIT_PROPS);
+
+export const getUserType: GetUserType = (userTypes) => {
+	const { shouldAdmin, shouldUser } = userTypes;
+
+	if ((shouldAdmin && shouldUser) || (!shouldAdmin && !shouldUser)) throw new BadRequest();
+	if (shouldAdmin) return 'adminId';
+	if (shouldUser) return 'userId';
+
+	throw new BadRequest();
+};

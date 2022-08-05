@@ -6,16 +6,22 @@ import {
 import http from 'http';
 import app from './restful';
 import { IN_PROD, PORT } from './config';
-import { resolvers, typeDefs } from './graphql';
+import { directives, resolvers, typeDefs } from './graphql';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+
+let schema = makeExecutableSchema({ typeDefs, resolvers });
+Object.entries(directives).forEach(([key, directive]): void => {
+	schema = directive(schema, key);
+});
 
 const httpServer = http.createServer(app);
 
 const server = new ApolloServer({
-	typeDefs,
-	resolvers,
 	csrfPrevention: true,
 	cache: 'bounded',
+	schema,
 	plugins: [IN_PROD ? disablePlayground({ embed: true }) : enablePlayground({ httpServer })],
+	context: ({ req, res }) => ({ req, res }),
 });
 
 server.start().then(() => {

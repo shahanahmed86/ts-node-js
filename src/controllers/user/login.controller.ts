@@ -16,7 +16,7 @@ type Result = {
 
 const notAuthenticated = 'username or password is incorrect';
 
-export const login: Controller<Args, Result> = async (root, args) => {
+export const login: Controller<null, Args, Result> = async (root, args) => {
 	await joiValidator(userLoginSchema, args);
 
 	const { username, password } = args;

@@ -5,7 +5,7 @@ import { includeDeleteParams, omitProps } from '../../utils/logics.utils';
 
 type Result = Prisma.SignUpWhereInput;
 
-export const loggedIn: Controller<object, Result> = async (root, args, { req }) => {
+export const loggedIn: Controller<null, object, Result> = async (root, args, { req }) => {
 	if (!req.userId) throw new NotAuthorized();
 
 	const userWhereInput: Prisma.UserWhereInput = { id: req.userId };

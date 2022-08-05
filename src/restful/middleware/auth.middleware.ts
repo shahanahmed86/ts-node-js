@@ -1,19 +1,18 @@
 import { authController, guestController } from '../../controllers/middleware/auth.controller';
 import { KeyIds } from '../../types/common.types';
 import { ContextFunction } from '../../types/wrapper.types';
-import { convertUnknownIntoError } from '../../utils/logics.utils';
+import { restCatch } from '../../utils/errors.utils';
 
-export const guest: ContextFunction = (req, res, next) => {
-	try {
-		guestController(req);
+export const guest = (): ContextFunction => {
+	return async (req, res, next) => {
+		try {
+			guestController(req);
 
-		next();
-	} catch (e) {
-		const error = convertUnknownIntoError(e);
-
-		req.error = error;
-		res.status(error.status).send(error.message);
-	}
+			next();
+		} catch (e) {
+			restCatch(e, req, res);
+		}
+	};
 };
 
 export const auth = (key: KeyIds): ContextFunction => {
@@ -23,10 +22,7 @@ export const auth = (key: KeyIds): ContextFunction => {
 
 			next();
 		} catch (e) {
-			const error = convertUnknownIntoError(e);
-
-			req.error = error;
-			res.status(error.status).send(error.message);
+			restCatch(e, req, res);
 		}
 	};
 };

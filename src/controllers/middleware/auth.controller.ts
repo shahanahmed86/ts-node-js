@@ -11,10 +11,10 @@ const invalidSession: string = 'no session or invalid';
 
 const hasToken: HasToken = (req) => req.headers.authorization;
 
-const validateToken: ValidateToken = async (req, tokenValue, key) => {
-	if (!tokenValue.includes('Bearer ')) throw new NotAuthenticated(invalidSession);
+const validateToken: ValidateToken = async (req, _token, key) => {
+	if (!_token.includes('Bearer ')) throw new NotAuthenticated(invalidSession);
 
-	const [, token] = tokenValue.split(' ');
+	const [, token] = _token.split(' ');
 
 	const payload = await decodePayload(token);
 	if (!payload || !(key in payload) || !('exp' in payload)) {

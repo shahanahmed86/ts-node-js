@@ -25,7 +25,7 @@ type Result = {
 	payload: Prisma.SignUpWhereInput;
 };
 
-export const register: Controller<Args, Result> = async (root, args) => {
+export const register: Controller<null, Args, Result> = async (root, args) => {
 	await joiValidator(userSignUpSchema, args);
 
 	const where: Prisma.SignUpWhereInput = includeDeleteParams({

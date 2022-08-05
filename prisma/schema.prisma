@@ -15,7 +15,7 @@ model Admin {
   username     String
   password     String
   deletedUsers User[]   @relation(name: "Users_Deleted_By_Admin")
-  SignUp       SignUp[] @relation(name: "Signups_Deleted_By_Admin")
+  signUps      SignUp[] @relation(name: "Signups_Deleted_By_Admin")
   createdAt    DateTime
   updatedAt    DateTime
 }
