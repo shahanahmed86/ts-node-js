@@ -13,7 +13,7 @@ export type Controller<R, A, C> = (
 	args: A,
 	context: ContextObject,
 	info?: GraphQLResolveInfo,
-) => Promise<C>;
+) => C | Promise<C>;
 
 export type ContextFunction = (
 	req: IRequest,

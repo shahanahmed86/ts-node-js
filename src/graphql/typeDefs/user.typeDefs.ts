@@ -17,7 +17,7 @@ const userSchema = gql`
     fullName: String
     email: String
     cell: String
-    gender: Gender
+    gender: GenderType
     user: User!
     userId: String!
     createdAt: Date!
@@ -47,7 +47,7 @@ const userSchema = gql`
     email: String
     cell: String
     gender: GenderType
-  };
+  }
 `;
 
 export default userSchema;

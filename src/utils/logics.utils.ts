@@ -1,3 +1,4 @@
+import { v4 as uuidV4 } from 'uuid';
 import _ from 'lodash';
 import { ObjectSchema } from 'joi';
 import { BadRequest, HttpError } from './errors.utils';
@@ -43,3 +44,5 @@ export const getUserType: GetUserType = (userTypes) => {
 
 	throw new BadRequest();
 };
+
+export const getUniqueId = () => uuidV4();

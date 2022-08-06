@@ -18,3 +18,7 @@ export const changePasswordSchema = Joi.object({
 		'any.invalid': '{#label} cannot be same as old one',
 	}),
 });
+
+export const fileRef = Joi.object({
+	filename: Joi.string().required().label('filename'),
+});

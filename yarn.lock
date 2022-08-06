@@ -157,17 +157,7 @@
     fast-json-stable-stringify "^2.1.0"
     tslib "^2.4.0"
 
-"@graphql-tools/schema@8.5.1", "@graphql-tools/schema@^8.0.0":
-  version "8.5.1"
-  resolved "https://registry.npmjs.org/@graphql-tools/schema/-/schema-8.5.1.tgz"
-  integrity sha512-0Esilsh0P/qYcB5DKQpiKeQs/jevzIadNTaT0jeWklPMwNbT7yMX4EqZany7mbeRRlSRwMzNzL5olyFdffHBZg==
-  dependencies:
-    "@graphql-tools/merge" "8.3.1"
-    "@graphql-tools/utils" "8.9.0"
-    tslib "^2.4.0"
-    value-or-promise "1.0.11"
-
-"@graphql-tools/schema@^8.5.1":
+"@graphql-tools/schema@8.5.1", "@graphql-tools/schema@^8.0.0", "@graphql-tools/schema@^8.5.1":
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-8.5.1.tgz#c2f2ff1448380919a330312399c9471db2580b58"
   integrity sha512-0Esilsh0P/qYcB5DKQpiKeQs/jevzIadNTaT0jeWklPMwNbT7yMX4EqZany7mbeRRlSRwMzNzL5olyFdffHBZg==
@@ -177,16 +167,9 @@
     tslib "^2.4.0"
     value-or-promise "1.0.11"
 
-"@graphql-tools/utils@8.9.0":
+"@graphql-tools/utils@8.9.0", "@graphql-tools/utils@^8.9.0":
   version "8.9.0"
   resolved "https://registry.npmjs.org/@graphql-tools/utils/-/utils-8.9.0.tgz"
-  integrity sha512-pjJIWH0XOVnYGXCqej8g/u/tsfV4LvLlj0eATKQu5zwnxd/TiTHq7Cg313qUPTFFHZ3PP5wJ15chYVtLDwaymg==
-  dependencies:
-    tslib "^2.4.0"
-
-"@graphql-tools/utils@^8.9.0":
-  version "8.9.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.9.0.tgz#c6aa5f651c9c99e1aca55510af21b56ec296cdb7"
   integrity sha512-pjJIWH0XOVnYGXCqej8g/u/tsfV4LvLlj0eATKQu5zwnxd/TiTHq7Cg313qUPTFFHZ3PP5wJ15chYVtLDwaymg==
   dependencies:
     tslib "^2.4.0"
@@ -527,6 +510,11 @@
   dependencies:
     "@types/express" "*"
     "@types/serve-static" "*"
+
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
 
 "@typescript-eslint/eslint-plugin@^5.31.0":
   version "5.31.0"

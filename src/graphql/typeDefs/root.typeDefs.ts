@@ -12,7 +12,7 @@ const rootSchema = gql`
 		GOOGLE
 	}
 
-	enum Gender {
+	enum GenderType {
 		MALE
 		FEMALE
 		PREFER_NOT_TO_SAY
