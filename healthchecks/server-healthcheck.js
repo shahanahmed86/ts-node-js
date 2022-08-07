@@ -1,10 +1,12 @@
-import http, { RequestOptions } from 'http';
-import { PORT } from '../src/config';
+/* eslint-disable @typescript-eslint/no-var-requires */
+require('dotenv/config');
 
-const options: RequestOptions | string | URL = {
+const http = require('http');
+
+const options = {
 	timeout: 2000,
 	host: 'localhost',
-	port: PORT,
+	port: +process.env.APP_PORT,
 	path: '/api/healthcheck', // must be the same as HEALTHCHECK in Dockerfile
 };
 
@@ -14,7 +16,7 @@ const request = http.request(options, (res) => {
 	process.exit();
 });
 
-request.on('error', (err) => {
+request.on('error', function (err) {
 	console.error('ERROR', err);
 	process.exit(1);
 });

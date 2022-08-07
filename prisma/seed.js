@@ -1,13 +1,12 @@
-import('dotenv/config');
+/* eslint-disable @typescript-eslint/no-var-requires */
+require('dotenv/config');
 
-import { hashSync } from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
-
-const BCRYPT_SALT = parseInt(process.env.BCRYPT_SALT);
+const bcrypt = require('bcryptjs');
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const hashPassword = (salt) => hashSync(salt, BCRYPT_SALT);
+const hashSync = (value = '123Abc456') => bcrypt.hashSync(value, +process.env.BCRYPT_SALT);
 const getZeroTimeZone = (value = new Date()) => value.toISOString();
 
 (async () => {
@@ -17,7 +16,7 @@ const getZeroTimeZone = (value = new Date()) => value.toISOString();
 		let user = await prisma.admin.findFirst({ where: { username } });
 		if (!user) {
 			const now = getZeroTimeZone(),
-				password = hashPassword('123Abc456'),
+				password = hashSync('123Abc456'),
 				createdAt = now,
 				updatedAt = now;
 			const data = { username, password, createdAt, updatedAt };

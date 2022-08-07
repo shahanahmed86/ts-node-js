@@ -5,7 +5,7 @@ import { BadRequest, HttpError } from './errors.utils';
 import { SHOULD_OMIT_PROPS } from './constants.utils';
 import { GetUserType } from '../types/common.types';
 
-type GetMillSeconds = (value: number) => number;
+type GetMillSeconds = (value?: number) => number;
 export const getMillSeconds: GetMillSeconds = (value = Date.now()) => new Date(value).getTime();
 
 type GetZeroTimeZone = (value?: Date) => string;
@@ -15,7 +15,7 @@ export const convertUnknownIntoError = (err: unknown | any): HttpError => {
 	let error: HttpError;
 
 	if (err instanceof HttpError) error = err;
-	else if (typeof err === 'string') error = new BadRequest(err);
+	else if (typeof err === 'string' && err) error = new BadRequest(err);
 	else if (err instanceof Error) error = new BadRequest(err.message);
 	else error = new BadRequest();
 

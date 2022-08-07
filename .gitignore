@@ -102,3 +102,12 @@ dist
 
 # husky
 .husky/_
+
+# builds
+_builds
+
+# uploads
+src/uploads
+
+# docker secrets
+/secrets

@@ -5,7 +5,7 @@ import {
 } from 'apollo-server-core';
 import http from 'http';
 import app from './restful';
-import { IN_PROD, PORT } from './config';
+import { IN_PROD, APP_PORT } from './config';
 import { directives, resolvers, typeDefs } from './graphql';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
@@ -27,8 +27,8 @@ const server = new ApolloServer({
 server.start().then(() => {
 	server.applyMiddleware({ app, path: '/graphql', cors: false });
 
-	httpServer.listen(PORT, (): void => {
-		console.log(`Server is running at http://localhost:${PORT}`);
+	httpServer.listen(APP_PORT, (): void => {
+		console.log(`Server is running at http://localhost:${APP_PORT}`);
 	});
 });
 

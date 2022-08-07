@@ -1,54 +1,77 @@
 {
 	"name": "ts-node-server",
-	"version": "1.0.0",
-	"description": "",
+	"version": "0.0.1",
+	"description": "Boiler plate for nodejs application with graphql & express using typescript",
 	"main": "index.js",
 	"scripts": {
-		"prebuild": "rm -rf dist",
+		"prebuild": "npm run prettify && npm run lint && npm run test && rm -rf dist",
 		"build": "tsc",
-		"postinstall": "echo 'installing husky....' && husky install",
+		"prepare": "echo 'installing husky....' && husky install",
 		"dev": "cross-env NODE_ENV='development' nodemon --exec ts-node index.ts",
+		"prestart": "npm run build",
 		"start": "cross-env NODE_ENV='production' node dist",
-		"up": "docker-compose up -d",
-		"down": "docker-compose down",
-		"down:hard": "docker-compose down -v",
+		"up:dev": "make run-dev-up",
+		"down:dev": "make run-dev-down",
+		"down:dev_hard": "make run-dev-down-hard",
+		"up:prod": "make run-prod-up",
+		"down:prod": "make run-prod-down",
 		"db:format": "prisma format",
-		"predb:deploy": "yarn db:format",
+		"predb:deploy": "npm run db:format",
 		"db:deploy": "prisma migrate dev --name init",
+		"postdb:deploy": "npm run db:seed",
 		"db:seed": "prisma db seed",
 		"db:reset": "prisma migrate reset",
 		"db:generate": "prisma generate",
 		"lint": "eslint '**/*.ts'",
-		"prettify": "prettier --no-editorconfig -l --write '**/*.ts'"
+		"prettify": "prettier --no-editorconfig -l --write '**/*.ts'",
+		"test": "mocha -r ts-node/register 'src/tests/**/*.test.ts' --exit"
 	},
 	"lint-staged": {
 		"**/*.ts": [
-			"yarn prettify",
-			"yarn lint"
+			"npm run prettify",
+			"npm run lint",
+			"npm run test"
 		]
 	},
 	"prisma": {
-		"seed": "node -r esm prisma/seed.js"
+		"seed": "node prisma/seed.js"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/shahanahmed86/ts-node-server.git"
+	},
+	"keywords": [
+		"typescript",
+		"boiler-plate",
+		"nodejs",
+		"apollo server express",
+		"apollo server"
+	],
+	"author": "Shahan",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/shahanahmed86/ts-node-server.git/issues"
+	},
+	"homepage": "https://github.com/shahanahmed86/ts-node-server.git#readme",
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
+		"@types/chai": "^4.3.1",
 		"@types/cors": "^2.8.12",
 		"@types/express": "^4.17.13",
 		"@types/express-fileupload": "^1.2.3",
 		"@types/jsonwebtoken": "^8.5.8",
 		"@types/lodash": "^4.14.182",
+		"@types/mocha": "^9.1.1",
 		"@types/morgan": "^1.9.3",
 		"@types/node": "^18.6.3",
 		"@types/swagger-jsdoc": "^6.0.1",
 		"@types/swagger-ui-express": "^4.1.3",
 		"@typescript-eslint/eslint-plugin": "^5.31.0",
 		"@typescript-eslint/parser": "^5.31.0",
+		"chai": "^4.3.6",
 		"eslint": "^8.20.0",
-		"husky": "^8.0.1",
 		"lint-staged": "^13.0.3",
+		"mocha": "^10.0.0",
 		"nodemon": "^2.0.19",
 		"prettier": "^2.7.1",
 		"swagger-jsdoc": "^6.2.1",
@@ -67,10 +90,10 @@
 		"cors": "^2.8.5",
 		"cross-env": "^7.0.3",
 		"dotenv": "^16.0.1",
-		"esm": "^3.2.25",
 		"express": "^4.18.1",
 		"express-fileupload": "^1.4.0",
 		"graphql": "^16.5.0",
+		"husky": "^8.0.1",
 		"joi": "^17.6.0",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.21",

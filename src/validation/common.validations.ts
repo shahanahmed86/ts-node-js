@@ -13,12 +13,16 @@ export const passwordSchema = Joi.string()
 	});
 
 export const changePasswordSchema = Joi.object({
-	oldPassword: passwordSchema.label('old password'),
-	password: passwordSchema.disallow(Joi.ref('oldPassword')).label('new password').messages({
-		'any.invalid': '{#label} cannot be same as old one',
-	}),
-});
+	oldPassword: passwordSchema.required().label('old password'),
+	password: passwordSchema
+		.disallow(Joi.ref('oldPassword'))
+		.label('new password')
+		.messages({
+			'any.invalid': '{#label} cannot be same as old one',
+		})
+		.required(),
+}).required();
 
 export const fileRef = Joi.object({
 	filename: Joi.string().required().label('filename'),
-});
+}).required();

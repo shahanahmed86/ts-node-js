@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  web:
+    deploy:
+      mode: global
+
+  server:
+    image: 127.0.0.1:5000/ts-node-server:0.0.1
+    command: [ "bash", "-c", "./db_deploy.sh && npm run start" ]
+    secrets:
+      - NODE_ENV
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 2
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 0
+        order: stop-first
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  mysqldb:
+    volumes:
+      - mysql_prod:/var/lib/mysql
+
+volumes:
+  mysql_prod:
+    driver: local
+
+networks:
+  ts-node-server:
+
+    driver: overlay
