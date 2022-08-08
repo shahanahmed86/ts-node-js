@@ -6,7 +6,7 @@ const http = require('http');
 const options = {
 	timeout: 2000,
 	host: 'localhost',
-	port: +process.env.APP_PORT,
+	port: parseInt(process.env.APP_PORT || 4000),
 	path: '/api/healthcheck', // must be the same as HEALTHCHECK in Dockerfile
 };
 

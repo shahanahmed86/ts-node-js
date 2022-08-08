@@ -1,19 +1,11 @@
 version: '3.7'
 
 services:
-  web:
-    image: nginx:1.21.6-alpine
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/default.html:/usr/share/nginx/html/index.html
-    depends_on:
-      - server
-    networks:
-      - ts-node-server
-
   server:
+    depends_on:
+      - mysqldb
+    networks:
+      - ts-node-js
     secrets:
       - APP_PORT
       - APP_PROTOCOL
@@ -40,10 +32,7 @@ services:
       - DB_NAME_FILE=/run/secrets/DB_NAME
       - DB_PORT_FILE=/run/secrets/DB_PORT
       - DATABASE_URL_FILE=/run/secrets/DATABASE_URL
-    depends_on:
-      - mysqldb
-    networks:
-      - ts-node-server
+
   mysqldb:
     image: mysql:8.0.28-oracle
     command: --authentication_policy=mysql_native_password
@@ -54,25 +43,25 @@ services:
       interval: 11s
       timeout: 5s
       retries: 5
+    cap_add:
+      - SYS_NICE # CAP_SYS_NICE
+    networks:
+      - ts-node-js
     secrets:
       - DB_USER
       - DB_PASS
       - DB_NAME
+      - DB_PORT
     environment:
-      MYSQL_ROOT_PASSWORD: $DB_PASS
-      MYSQL_DATABASE: $DB_NAME
-      MYSQL_USER: $DB_USER
-      MYSQL_PASSWORD: $DB_PASS
-    cap_add:
-      - SYS_NICE # CAP_SYS_NICE
-    networks:
-      - ts-node-server
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/DB_PASS
+      - MYSQL_DATABASE_FILE=/run/secrets/DB_NAME
+      - MYSQL_USER_FILE=/run/secrets/DB_USER
+      - MYSQL_PASSWORD_FILE=/run/secrets/DB_PASS
+      - DB_PORT_FILE=/run/secrets/DB_PORT
 
 secrets:
   APP_PORT:
     file: ./secrets/APP_PORT
-  NODE_ENV:
-    file: ./secrets/NODE_ENV
   APP_PROTOCOL:
     file: ./secrets/APP_PROTOCOL
   APP_HOST:

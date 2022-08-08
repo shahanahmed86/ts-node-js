@@ -1,5 +1,3 @@
-# Adding test stage, and avoiding source in dev
-
 FROM node:16-bullseye-slim as base
 ENV NODE_ENV=production
 RUN apt-get update \
@@ -21,8 +19,10 @@ HEALTHCHECK --interval=30s --retries=5 --timeout=5s CMD node /app/healthchecks/s
 FROM base as dev
 ENV NODE_ENV=development
 ENV PATH=/app/node_modules/.bin:$PATH
-RUN npm install && npm cache clean --force
-CMD ["nodemon", "index.js"]
+RUN npm cache clean --force && npm install
+COPY --chown=node:node . .
+RUN npm run build
+CMD ["npm", "run", "dev"]
 
 # copy in source code for test and prod stages
 # we do this in its own stage to ensure the
@@ -30,7 +30,8 @@ CMD ["nodemon", "index.js"]
 # uses to build prod stage
 FROM base as source
 COPY --chown=node:node . .
+COPY --from=dev /app/dist ./dist
 
 ### prod stage
 FROM source as prod
-CMD [ "node", "dist/index.js" ]
+CMD [ "npm", "run", "start" ]

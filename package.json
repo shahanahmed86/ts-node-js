@@ -1,29 +1,29 @@
 {
-	"name": "ts-node-server",
+	"name": "ts-node-js",
 	"version": "0.0.1",
 	"description": "Boiler plate for nodejs application with graphql & express using typescript",
 	"main": "index.js",
 	"scripts": {
-		"prebuild": "npm run prettify && npm run lint && npm run test && rm -rf dist",
-		"build": "tsc",
 		"prepare": "echo 'installing husky....' && husky install",
+		"prebuild": "npm run db:generate && rm -rf dist",
+		"build": "tsc",
+		"prestart": "npm run db:deploy",
+		"start": "cross-env NODE_ENV='production' node dist/index.js",
 		"dev": "cross-env NODE_ENV='development' nodemon --exec ts-node index.ts",
-		"prestart": "npm run build",
-		"start": "cross-env NODE_ENV='production' node dist",
 		"up:dev": "make run-dev-up",
+		"up:prod": "make run-prod-up",
 		"down:dev": "make run-dev-down",
 		"down:dev_hard": "make run-dev-down-hard",
-		"up:prod": "make run-prod-up",
 		"down:prod": "make run-prod-down",
 		"db:format": "prisma format",
+		"db:generate": "prisma generate",
 		"predb:deploy": "npm run db:format",
 		"db:deploy": "prisma migrate dev --name init",
 		"postdb:deploy": "npm run db:seed",
 		"db:seed": "prisma db seed",
 		"db:reset": "prisma migrate reset",
-		"db:generate": "prisma generate",
-		"lint": "eslint '**/*.ts'",
 		"prettify": "prettier --no-editorconfig -l --write '**/*.ts'",
+		"lint": "eslint '**/*.ts'",
 		"test": "mocha -r ts-node/register 'src/tests/**/*.test.ts' --exit"
 	},
 	"lint-staged": {
@@ -38,7 +38,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/shahanahmed86/ts-node-server.git"
+		"url": "git+https://github.com/shahanahmed86/ts-node-js.git"
 	},
 	"keywords": [
 		"typescript",
@@ -50,9 +50,9 @@
 	"author": "Shahan",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/shahanahmed86/ts-node-server.git/issues"
+		"url": "https://github.com/shahanahmed86/ts-node-js.git/issues"
 	},
-	"homepage": "https://github.com/shahanahmed86/ts-node-server.git#readme",
+	"homepage": "https://github.com/shahanahmed86/ts-node-js.git#readme",
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"@types/chai": "^4.3.1",
@@ -64,8 +64,6 @@
 		"@types/mocha": "^9.1.1",
 		"@types/morgan": "^1.9.3",
 		"@types/node": "^18.6.3",
-		"@types/swagger-jsdoc": "^6.0.1",
-		"@types/swagger-ui-express": "^4.1.3",
 		"@typescript-eslint/eslint-plugin": "^5.31.0",
 		"@typescript-eslint/parser": "^5.31.0",
 		"chai": "^4.3.6",
@@ -74,8 +72,6 @@
 		"mocha": "^10.0.0",
 		"nodemon": "^2.0.19",
 		"prettier": "^2.7.1",
-		"swagger-jsdoc": "^6.2.1",
-		"swagger-ui-express": "^4.5.0",
 		"ts-node": "^10.9.1",
 		"typescript": "^4.7.4"
 	},

@@ -111,3 +111,6 @@ src/uploads
 
 # docker secrets
 /secrets
+
+# prisma
+/prisma/migrations

@@ -24,7 +24,6 @@ file_env() {
 }
 
 file_env 'APP_PORT'
-file_env 'NODE_ENV'
 file_env 'APP_PROTOCOL'
 file_env 'APP_HOST'
 file_env 'BCRYPT_SALT'
