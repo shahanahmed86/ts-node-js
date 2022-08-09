@@ -28,6 +28,13 @@
 # Clone
 git clone git@github.com:shahanahmed86/ts-node-js.git && cd ts-node-js
 
+# to initiate the server run
+node setup
+
+# flags
+--yes || -Y # to skip question and go with default options
+--force-reinstall || -F # to reinstall
+
 # development mode
 npm run up:dev # start
 npm run down:dev # end
