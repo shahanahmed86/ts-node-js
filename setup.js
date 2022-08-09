@@ -1,0 +1,233 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const fs = require('fs');
+const cp = require('child_process');
+
+shouldInstallModules();
+
+const inquirer = require('inquirer');
+const arg = require('arg');
+
+const rawArgs = arg(
+	{
+		'--yes': Boolean,
+		'-Y': '--yes',
+		'--force-reinstall': Boolean,
+		'-F': '--force-reinstall',
+	},
+	{
+		argv: process.argv.slice(2),
+	},
+);
+
+let options = {
+	forceReInstall: rawArgs['--force-reinstall'] || false,
+	skipPrompts: rawArgs['--yes'] || false,
+	args: rawArgs._[0],
+};
+
+const questions = [
+	{
+		type: 'input',
+		name: 'project_name',
+		message: 'Please enter the name of the project: ',
+		default: 'ts-node-js',
+	},
+	{
+		type: 'input',
+		name: 'repository_name',
+		message: "Please enter the Repository's URL: ",
+		default: 'git@github.com:shahanahmed86/ts-node-js.git',
+	},
+	{
+		type: 'input',
+		name: 'image_name',
+		message: "Please enter the Docker Image's name: ",
+		default: '127.0.0.1:5000/ts-node-js:0.0.1',
+	},
+	{
+		type: 'input',
+		name: 'BCRYPT_SALT',
+		message: 'Please enter the salt value to encrypt password/values with',
+		default: '10',
+	},
+	{
+		type: 'input',
+		name: 'BCRYPT_MAX_BYTES',
+		message: 'Please enter the salt value for maximum encryption bytes for password/values with',
+		default: '72',
+	},
+	{
+		type: 'password',
+		name: 'JWT_SECRET',
+		message: 'Please enter the secret to create a Login token with',
+		default: 'pussy-cat',
+	},
+	{
+		type: 'input',
+		name: 'DB_HOST',
+		message: 'Please enter the host of database',
+		default: 'mysqldb',
+	},
+	{
+		type: 'input',
+		name: 'DB_USER',
+		message: "Please enter the username of Database's host",
+		default: 'prisma',
+	},
+	{
+		type: 'password',
+		name: 'DB_PASS',
+		message: "Please enter the password of Database's host",
+		default: 'prisma',
+	},
+	{
+		type: 'input',
+		name: 'DB_NAME',
+		message: "Please enter the name of Database's host like mydb, test or etc",
+		default: 'mydb',
+	},
+	{
+		type: 'input',
+		name: 'DB_PORT',
+		message: "Please enter the port where Database's host",
+		default: '3306',
+	},
+];
+
+(async () => {
+	try {
+		options = await promptForMissingOptions(options);
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { forceReInstall, skipPrompts, args, project_name, repository_name, image_name, ...env } =
+			options;
+
+		if (forceReInstall) {
+			if (fs.existsSync('node_modules')) fs.rmSync('node_modules', { recursive: true });
+			if (fs.existsSync('.husky/_')) fs.rmSync('.husky/_', { recursive: true });
+			if (fs.existsSync('secrets')) fs.rmSync('secrets', { recursive: true });
+			if (fs.existsSync('.env')) fs.rmSync('.env');
+		}
+
+		shouldInstallModules();
+
+		const isEnvExists = fs.existsSync('.env');
+
+		const envs = fs.createWriteStream('.env', { flags: 'a' });
+		if (!isEnvExists) {
+			const envExample = fs.readFileSync('.env.example', 'utf8');
+			await insertContent(envs, envExample);
+		}
+
+		let allVars = getJSON('.env');
+		Object.keys(env).forEach(async (k) => {
+			if (!(k in allVars)) await insertContent(envs, `\n${k}=${env[k]}`);
+		});
+
+		const databaseUrl = `mysql://root:${env.DB_PASS}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`;
+		await insertContent(envs, `\nDATABASE_URL=${databaseUrl}`);
+
+		allVars = getJSON('.env');
+		if (!fs.existsSync('secrets')) fs.mkdirSync('secrets');
+		Object.keys(allVars).forEach((k) => {
+			if (!fs.existsSync(`secrets/${k}`)) fs.appendFileSync(`secrets/${k}`, allVars[k]);
+		});
+
+		replaceContent('package.json', 'https://github.com/shahanahmed86/ts-node-js', repository_name);
+		executeCommand(
+			`rm -rf .git && git init && git add . && git commit -m "initial commit" && git remote add origin ${repository_name}`,
+		);
+
+		replaceContent('docker-compose.prod.yml', '127.0.0.1:5000/ts-node-js:0.0.1', image_name);
+		[
+			'docker-compose.yml',
+			'docker-compose.dev.yml',
+			'docker-compose.prod.yml',
+			'package.json',
+			'package-lock.json',
+			'Makefile',
+		].forEach((filename) => {
+			replaceContent(filename, 'ts-node-js', project_name);
+		});
+
+		executeCommand(`npm run up:dev`);
+
+		// initial commit
+		// executeCommand('git add . && git commit -m "initial commit" --no-verify', undefined, 'ignore');
+
+		coloredLogs('Setup Finished', undefined, true);
+	} catch (error) {
+		coloredLogs(error.message, true);
+
+		process.exit(1);
+	}
+})();
+
+function executeCommand(cmd, exit = false, stdio = 'inherit') {
+	const result = cp.spawnSync(cmd, {
+		cwd: process.cwd(),
+		env: process.env,
+		stdio,
+		shell: true,
+		encoding: 'utf8`',
+	});
+
+	if (result.status || exit) process.exit(result.status);
+	else {
+		if (stdio === 'pipe') return result.stdout.replace('\n', '');
+		else return true;
+	}
+}
+
+function coloredLogs(message, failed = false, shouldExit = false) {
+	executeCommand(`echo "\n\\e[1;${failed ? 31 : 32}m ...${message}... \\e[0m"`, shouldExit);
+}
+
+function promptForMissingOptions(opts) {
+	if (opts.skipPrompts) {
+		return questions.reduce(
+			(acc, cur) => Object.assign(opts, acc, { [cur.name]: cur.default }),
+			{},
+		);
+	}
+
+	return inquirer
+		.prompt(questions)
+		.then((ans) =>
+			questions.reduce((acc, cur) => Object.assign(opts, acc, { [cur.name]: ans[cur.name] }), {}),
+		);
+}
+
+function getJSON(filePath, separate = '=') {
+	return fs
+		.readFileSync(filePath, 'utf8')
+		.split('\n')
+		.reduce((acc, cur) => {
+			const [key, value] = cur.trim().split(separate);
+			if (key.trim()) acc = { ...acc, [key]: value };
+			return acc;
+		}, {});
+}
+
+function shouldInstallModules() {
+	if (!fs.existsSync('.git')) executeCommand(`git init`);
+	if (!fs.existsSync('node_modules')) executeCommand('npm install');
+}
+
+function insertContent(envs, content) {
+	return new Promise((resolve, reject) => {
+		envs.write(content, (err) => {
+			if (err) reject(err.message);
+			resolve(true);
+		});
+	});
+}
+
+function replaceContent(filename, toReplace, replaceWith) {
+	if (!filename || !toReplace || !replaceWith) {
+		throw new Error('All argument for replaceContent are necessary...');
+	}
+
+	const content = fs.readFileSync(filename, 'utf8');
+	const replacedContent = content.replace(`/${toReplace}/g`, replaceWith);
+	fs.writeFileSync(filename, replacedContent);
+}

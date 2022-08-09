@@ -38,7 +38,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/shahanahmed86/ts-node-js.git"
+		"url": "git+https://github.com/shahanahmed86/ts-node-js"
 	},
 	"keywords": [
 		"typescript",
@@ -47,12 +47,12 @@
 		"apollo server express",
 		"apollo server"
 	],
-	"author": "Shahan",
+	"author": "Shahan Ahmed",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/shahanahmed86/ts-node-js.git/issues"
+		"url": "https://github.com/shahanahmed86/ts-node-js/issues"
 	},
-	"homepage": "https://github.com/shahanahmed86/ts-node-js.git#readme",
+	"homepage": "https://github.com/shahanahmed86/ts-node-js#readme",
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"@types/chai": "^4.3.1",
@@ -90,6 +90,7 @@
 		"express-fileupload": "^1.4.0",
 		"graphql": "^16.5.0",
 		"husky": "^8.0.1",
+		"inquirer": "^8.2.0",
 		"joi": "^17.6.0",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.21",
