@@ -28,24 +28,6 @@ let options = {
 const questions = [
 	{
 		type: 'input',
-		name: 'project_name',
-		message: 'Please enter the name of the project: ',
-		default: 'ts-node-js',
-	},
-	{
-		type: 'input',
-		name: 'repository_name',
-		message: "Please enter the Repository's URL: ",
-		default: 'git@github.com:shahanahmed86/ts-node-js.git',
-	},
-	{
-		type: 'input',
-		name: 'image_name',
-		message: "Please enter the Docker Image's name: ",
-		default: '127.0.0.1:5000/ts-node-js:0.0.1',
-	},
-	{
-		type: 'input',
 		name: 'BCRYPT_SALT',
 		message: 'Please enter the salt value to encrypt password/values with',
 		default: '10',
@@ -132,28 +114,6 @@ const questions = [
 			if (!fs.existsSync(`secrets/${k}`)) fs.appendFileSync(`secrets/${k}`, allVars[k]);
 		});
 
-		replaceContent('package.json', 'https://github.com/shahanahmed86/ts-node-js', repository_name);
-		executeCommand(
-			`rm -rf .git && git init && git add . && git commit -m "initial commit" && git remote add origin ${repository_name}`,
-		);
-
-		replaceContent('docker-compose.prod.yml', '127.0.0.1:5000/ts-node-js:0.0.1', image_name);
-		[
-			'docker-compose.yml',
-			'docker-compose.dev.yml',
-			'docker-compose.prod.yml',
-			'package.json',
-			'package-lock.json',
-			'Makefile',
-		].forEach((filename) => {
-			replaceContent(filename, 'ts-node-js', project_name);
-		});
-
-		executeCommand(`npm run up:dev`);
-
-		// initial commit
-		// executeCommand('git add . && git commit -m "initial commit" --no-verify', undefined, 'ignore');
-
 		coloredLogs('Setup Finished', undefined, true);
 	} catch (error) {
 		coloredLogs(error.message, true);
@@ -209,7 +169,6 @@ function getJSON(filePath, separate = '=') {
 }
 
 function shouldInstallModules() {
-	if (!fs.existsSync('.git')) executeCommand(`git init`);
 	if (!fs.existsSync('node_modules')) executeCommand('npm install');
 }
 
@@ -220,14 +179,4 @@ function insertContent(envs, content) {
 			resolve(true);
 		});
 	});
-}
-
-function replaceContent(filename, toReplace, replaceWith) {
-	if (!filename || !toReplace || !replaceWith) {
-		throw new Error('All argument for replaceContent are necessary...');
-	}
-
-	const content = fs.readFileSync(filename, 'utf8');
-	const replacedContent = content.replace(`/${toReplace}/g`, replaceWith);
-	fs.writeFileSync(filename, replacedContent);
 }

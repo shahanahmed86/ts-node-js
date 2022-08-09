@@ -38,7 +38,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/shahanahmed86/ts-node-js"
+		"url": "git+https://github.com/shahanahmed86/ts-node-js.git"
 	},
 	"keywords": [
 		"typescript",
@@ -50,9 +50,9 @@
 	"author": "Shahan Ahmed",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/shahanahmed86/ts-node-js/issues"
+		"url": "https://github.com/shahanahmed86/ts-node-js.git/issues"
 	},
-	"homepage": "https://github.com/shahanahmed86/ts-node-js#readme",
+	"homepage": "https://github.com/shahanahmed86/ts-node-js.git#readme",
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"@types/chai": "^4.3.1",
