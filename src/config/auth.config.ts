@@ -1,5 +1,7 @@
-export const BCRYPT_SALT = parseInt(process.env.BCRYPT_SALT as string) || 12;
+const PRE_BCRYPT_SALT = process.env.BCRYPT_SALT || '12';
+export const BCRYPT_SALT = parseInt(PRE_BCRYPT_SALT);
 
-export const JWT_SECRET = (process.env.JWT_SECRET as string) || 'jwt_secret';
+export const JWT_SECRET = process.env.JWT_SECRET || 'pussy-cat';
 
-export const BCRYPT_MAX_BYTES = parseInt(process.env.BCRYPT_MAX_BYTES as string) || 72;
+const PRE_BCRYPT_MAX_BYTES = process.env.BCRYPT_MAX_BYTES || '72';
+export const BCRYPT_MAX_BYTES = parseInt(PRE_BCRYPT_MAX_BYTES);

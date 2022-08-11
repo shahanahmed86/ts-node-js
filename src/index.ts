@@ -14,9 +14,9 @@ Object.entries(directives).forEach(([key, directive]): void => {
 	schema = directive(schema, key);
 });
 
-const httpServer = http.createServer(app);
+export const httpServer = http.createServer(app);
 
-const server = new ApolloServer({
+export const graphqlServer = new ApolloServer({
 	csrfPrevention: true,
 	cache: 'bounded',
 	schema,
@@ -24,12 +24,10 @@ const server = new ApolloServer({
 	context: ({ req, res }) => ({ req, res }),
 });
 
-server.start().then(() => {
-	server.applyMiddleware({ app, path: '/graphql', cors: false });
+graphqlServer.start().then(() => {
+	graphqlServer.applyMiddleware({ app, path: '/graphql', cors: false });
 
 	httpServer.listen(APP_PORT, (): void => {
 		console.log(`Server is running at http://localhost:${APP_PORT}`);
 	});
 });
-
-export default server;

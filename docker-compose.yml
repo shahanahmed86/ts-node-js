@@ -5,7 +5,7 @@ services:
     depends_on:
       - mysqldb
     networks:
-      - ts-node-js
+      - app
     secrets:
       - APP_PORT
       - APP_PROTOCOL
@@ -46,7 +46,7 @@ services:
     cap_add:
       - SYS_NICE # CAP_SYS_NICE
     networks:
-      - ts-node-js
+      - app
     secrets:
       - DB_USER
       - DB_PASS

@@ -1,7 +1,7 @@
 import { compareSync, hashSync, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { ConflictError, NotAuthorized } from '../../utils/errors.utils';
-import { joiValidator } from '../../utils/logics.utils';
+import { convertUnknownIntoError, joiValidator } from '../../utils/logics.utils';
 import { changePasswordSchema } from '../../validation';
 
 type Args = {
@@ -12,7 +12,12 @@ type Args = {
 export const changePassword: Controller<null, Args, string> = async (root, args, { req }) => {
 	if (!req.adminId) throw new NotAuthorized();
 
-	await joiValidator(changePasswordSchema, args);
+	try {
+		await joiValidator(changePasswordSchema, args);
+	} catch (e) {
+		const error = convertUnknownIntoError(e);
+		throw new ConflictError(error.message);
+	}
 
 	const admin = await prisma.admin.findFirst({ where: { id: req.adminId } });
 	if (!admin) throw new NotAuthorized();

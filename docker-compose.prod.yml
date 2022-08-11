@@ -9,7 +9,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/default.html:/usr/share/nginx/html/index.html
     networks:
-      - ts-node-js
+      - app
     deploy:
       mode: global
     depends_on:
@@ -45,6 +45,6 @@ volumes:
     driver: local
 
 networks:
-  ts-node-js:
+  app:
 
     driver: overlay

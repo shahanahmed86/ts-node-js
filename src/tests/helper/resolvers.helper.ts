@@ -2,7 +2,8 @@ import { ObjectSchema } from 'joi';
 import { UserTypes } from '../../types/common.types';
 import { getUserType, joiValidator } from '../../utils/logics.utils';
 
-export const resolveJoiValidator = (schema: ObjectSchema, args: object): Promise<boolean> => {
+type ResolveJoiValidator = (schema: ObjectSchema, args: object) => Promise<boolean>;
+export const resolveJoiValidator: ResolveJoiValidator = (schema, args) => {
 	return new Promise((resolve) => {
 		joiValidator(schema, args)
 			.then(() => resolve(true))
