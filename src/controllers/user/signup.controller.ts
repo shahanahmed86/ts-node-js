@@ -9,6 +9,7 @@ import {
 	omitProps,
 } from '../../utils/logics.utils';
 import { userSignUpSchema } from '../../validation';
+import file from '../../library/file.library';
 
 type Args = {
 	username: string;
@@ -56,6 +57,7 @@ export const register: Controller<null, Args, Result> = async (root, args) => {
 	};
 
 	const signUp = await prisma.signUp.create({ data, include: { user: true } });
+	if (args.avatar) await file.moveImageFromTmp(args.avatar);
 
 	const token = encodePayload(signUp.userId, 'userId');
 

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv/config');
 
+const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');
 
@@ -23,6 +24,8 @@ const getZeroTimeZone = (value = new Date()) => value.toISOString();
 
 			user = await prisma.admin.create({ data });
 		}
+
+		user = _.omit(user, 'password');
 
 		console.log('prisma seeds.......... : ', user);
 		return user;

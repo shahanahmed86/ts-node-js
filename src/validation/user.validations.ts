@@ -1,14 +1,8 @@
 import Joi from 'joi';
-import { GENDER_OPTIONS, LOGIN_TYPES } from '../utils/constants.utils';
+import { GENDER_OPTIONS } from '../utils/constants.utils';
 import { usernameSchema, passwordSchema } from './common.validations';
 
-const loginTypeSchema = Joi.string()
-	.valid(...LOGIN_TYPES)
-	.label('login type')
-	.disallow('')
-	.required();
-
-const avatarSchema = Joi.string().uri().label('avatar').disallow('');
+const avatarSchema = Joi.string().label('avatar').disallow('');
 const fullNameSchema = Joi.string().min(3).max(30).label('full name').disallow('');
 const emailSchema = Joi.string().email().label('email').disallow('');
 const cellSchema = Joi.string()
@@ -31,7 +25,6 @@ export const userSignUpSchema = Joi.object({
 }).required();
 
 export const userLoginSchema = Joi.object({
-	loginType: loginTypeSchema,
 	username: usernameSchema,
 	password: usernameSchema.label('password'),
 }).required();

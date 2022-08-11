@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 import _ from 'lodash';
 import { ObjectSchema } from 'joi';
-import { BadRequest, HttpError } from './errors.utils';
+import { BadRequest, ConflictError, HttpError } from './errors.utils';
 import { SHOULD_OMIT_PROPS } from './constants.utils';
 import { GetUserType } from '../types/common.types';
 
@@ -29,8 +29,13 @@ export function includeDeleteParams<T>(where: T): T {
 	return Object.assign(where, { isDeleted: false, deletedAt: null });
 }
 
-export const joiValidator = (schema: ObjectSchema, payload: any): Promise<any> => {
-	return schema.validateAsync(payload, { abortEarly: false });
+export const joiValidator = async (schema: ObjectSchema, payload: any): Promise<any> => {
+	try {
+		await schema.validateAsync(payload, { abortEarly: false });
+	} catch (e) {
+		const error = convertUnknownIntoError(e);
+		throw new ConflictError(error.message);
+	}
 };
 
 export const omitProps = (obj: object, props?: string[]) => _.omit(obj, props || SHOULD_OMIT_PROPS);
