@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { commonHelper, userHelper } from '../../helper';
+import { commonHelper } from '../../helper';
+import * as userHelper from './user.helper';
 
 chai.use(chaiHttp);
 
@@ -23,7 +24,6 @@ describe('RESTful - User Authentication APIs', function () {
 		expect(res.body.token).to.be.a('string');
 		expect(res.body.payload).to.be.an('object');
 		expect(res.body.payload).not.to.have.property('password');
-		expect(res.body.payload.user).not.to.have.property('password');
 	});
 
 	it('user login', async () => {
@@ -39,7 +39,6 @@ describe('RESTful - User Authentication APIs', function () {
 		expect(res.body.token).to.be.a('string');
 		expect(res.body.payload).to.be.an('object');
 		expect(res.body.payload).not.to.have.property('password');
-		expect(res.body.payload.user).not.to.have.property('password');
 	});
 
 	it('user loggedIn', async () => {
@@ -73,4 +72,6 @@ describe('RESTful - User Authentication APIs', function () {
 		expect(res.status).to.be.equal(200);
 		expect(res.text).to.be.a('string');
 	});
+
+	after(() => commonHelper.hardDelete());
 });

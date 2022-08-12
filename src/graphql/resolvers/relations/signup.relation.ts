@@ -1,5 +1,6 @@
 import { Prisma, prisma } from '../../../library';
 import { Controller } from '../../../types/wrapper.types';
+import { NotFound } from '../../../utils/errors.utils';
 import { includeDeleteParams } from '../../../utils/logics.utils';
 
 type Controllers = {
@@ -10,7 +11,7 @@ const SignUp: Controllers = {
 	user: async (root) => {
 		try {
 			const id = root.id;
-			if (!id) return null;
+			if (!id) throw new NotFound('Please provide ID to get user');
 
 			return await prisma.signUp.findFirstOrThrow({ where: includeDeleteParams({ id }) }).user();
 		} catch (error) {

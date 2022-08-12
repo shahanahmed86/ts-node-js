@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { adminHelper } from '../../helper';
+import * as adminHelper from './admin.helper';
 
 chai.use(chaiHttp);
 

@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { BASE_URL } from '../../config';
+import { BASE_URL } from '../../../config';
 
 chai.use(chaiHttp);
 
@@ -18,7 +18,7 @@ export const loggedIn = (token: string) => {
 		.get(`/api/admin/auth`)
 		.set('content-type', 'application/json')
 		.set('Authorization', `Bearer ${token}`);
-}
+};
 
 export const changePassword = async (oldPassword: string, password: string, token: string) => {
 	return chai

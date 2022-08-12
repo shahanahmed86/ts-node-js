@@ -53,8 +53,10 @@ class File {
 				const destPath = path.join(this.path, newFile);
 
 				fs.rename(currentPath, destPath, (e) => {
-					const error = convertUnknownIntoError(e);
-					if (error) reject(error);
+					if (e) {
+						const error = convertUnknownIntoError(e);
+						if (error) reject(error);
+					}
 
 					resolve(newFile);
 				});

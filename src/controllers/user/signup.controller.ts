@@ -41,7 +41,6 @@ export const register: Controller<null, Args, Result> = async (root, args) => {
 	const data: Prisma.SignUpCreateInput = {
 		createdAt: now,
 		updatedAt: now,
-		avatar: args.avatar,
 		cell: args.cell,
 		email: args.email,
 		fullName: args.fullName,
@@ -55,9 +54,9 @@ export const register: Controller<null, Args, Result> = async (root, args) => {
 			},
 		},
 	};
+	if (args.avatar) data.avatar = await file.moveImageFromTmp(args.avatar);
 
 	const signUp = await prisma.signUp.create({ data, include: { user: true } });
-	if (args.avatar) await file.moveImageFromTmp(args.avatar);
 
 	const token = encodePayload(signUp.userId, 'userId');
 

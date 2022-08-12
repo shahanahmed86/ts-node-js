@@ -1,5 +1,6 @@
 import { Prisma, prisma } from '../../../library';
 import { Controller } from '../../../types/wrapper.types';
+import { NotFound } from '../../../utils/errors.utils';
 import { includeDeleteParams } from '../../../utils/logics.utils';
 
 type Controllers = {
@@ -10,7 +11,7 @@ const User: Controllers = {
 	signUps: async (root) => {
 		try {
 			const id = root.id;
-			if (!id) return [];
+			if (!id) throw new NotFound('Please provide ID to get signUps');
 
 			return await prisma.user
 				.findFirstOrThrow({ where: { id } })

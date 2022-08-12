@@ -12,7 +12,6 @@ const userSchema = gql`
   type SignUp {
     id: String!
     username: String
-    password: String
     avatar: String
     fullName: String
     email: String
@@ -36,18 +35,16 @@ const userSchema = gql`
 	extend type Mutation {
     userLogin(username: String!, password: String!): AuthSignUp! @guest(shouldUser: true)
     userChangePassword(oldPassword: String!, password: String!): String! @auth(shouldUser: true)
-    userSignUp(inputSignUp: InputSignUp!): String! @auth(shouldUser: true)
+    userSignUp(
+      username: String!
+      password: String!
+      avatar: String
+      fullName: String
+      email: String
+      cell: String
+      gender: GenderType
+    ): AuthSignUp! @guest(shouldUser: true)
 	}
-
-  input InputSignUp {
-    username: String!
-    password: String!
-    avatar: String
-    fullName: String
-    email: String
-    cell: String
-    gender: GenderType
-  }
 `;
 
 export default userSchema;

@@ -1,8 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { BASE_URL } from '../../config';
-import { GenderType } from '../../types/common.types';
-
+import { GenderType } from '../../../types/common.types';
+import { BASE_URL } from '../../../config';
 chai.use(chaiHttp);
 
 export const signup = async (

@@ -7,7 +7,7 @@ import {
 } from '../../utils/logics.utils';
 import { HttpError } from '../../utils/errors.utils';
 import { changePasswordSchema } from '../../validation/index';
-import { resolveGetUserType, resolveJoiValidator } from '../helper';
+import { resolverHelper } from '../helper';
 
 describe('Unit testing on logics.utils.ts file', (): void => {
 	it('getMillSeconds', (): void => {
@@ -46,16 +46,16 @@ describe('Unit testing on logics.utils.ts file', (): void => {
 	});
 
 	it('joiValidator', async (): Promise<void> => {
-		let result: boolean = await resolveJoiValidator(changePasswordSchema, {});
+		let result: boolean = await resolverHelper.resolveJoiValidator(changePasswordSchema, {});
 		expect(result).to.be.false;
 
-		result = await resolveJoiValidator(changePasswordSchema, {
+		result = await resolverHelper.resolveJoiValidator(changePasswordSchema, {
 			oldPassword: 'hello',
 			password: 'hello1',
 		});
 		expect(result).to.be.false;
 
-		result = await resolveJoiValidator(changePasswordSchema, {
+		result = await resolverHelper.resolveJoiValidator(changePasswordSchema, {
 			oldPassword: '123Abc456',
 			password: '123aBc456',
 		});
@@ -63,16 +63,16 @@ describe('Unit testing on logics.utils.ts file', (): void => {
 	});
 
 	it('getUserType', (): void => {
-		let result = resolveGetUserType({ shouldAdmin: true, shouldUser: false });
+		let result = resolverHelper.resolveGetUserType({ shouldAdmin: true, shouldUser: false });
 		expect(result).to.deep.equal({ success: true, key: 'adminId' });
 
-		result = resolveGetUserType({ shouldAdmin: false, shouldUser: true });
+		result = resolverHelper.resolveGetUserType({ shouldAdmin: false, shouldUser: true });
 		expect(result).to.deep.equal({ success: true, key: 'userId' });
 
-		result = resolveGetUserType({ shouldAdmin: false, shouldUser: false });
+		result = resolverHelper.resolveGetUserType({ shouldAdmin: false, shouldUser: false });
 		expect(result).to.deep.equal({ success: false });
 
-		result = resolveGetUserType({ shouldAdmin: true, shouldUser: true });
+		result = resolverHelper.resolveGetUserType({ shouldAdmin: true, shouldUser: true });
 		expect(result).to.deep.equal({ success: false });
 	});
 });

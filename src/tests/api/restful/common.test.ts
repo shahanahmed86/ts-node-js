@@ -1,5 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import { BASE_URL } from '../../../config';
+import { GENDER_OPTIONS } from '../../../utils/constants.utils';
 import { commonHelper } from '../../helper';
 
 chai.use(chaiHttp);
@@ -42,5 +44,13 @@ describe('RESTful - Common APIs', function () {
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(404);
 		expect(res.text).to.be.a('string');
+	});
+
+	it('get gender', async () => {
+		const { body, error, status } = await chai.request(BASE_URL).get('/api/common/gender');
+
+		GENDER_OPTIONS.map((gender) => expect(body).to.be.an('array').that.include(gender));
+		expect(error).to.be.false;
+		expect(status).to.be.equal(200);
 	});
 });
