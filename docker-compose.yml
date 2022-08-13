@@ -34,10 +34,12 @@ services:
       - DATABASE_URL_FILE=/run/secrets/DATABASE_URL
 
   mysqldb:
+    networks:
+      - app
     image: mysql:8.0.28-oracle
-    command: --authentication_policy=mysql_native_password
     volumes:
-      - ./healthchecks:/healthchecks
+      - ./src/healthchecks:/healthchecks
+    command: --authentication_policy=mysql_native_password
     healthcheck:
       test: /healthchecks/mysql-healthcheck.sh
       interval: 11s
@@ -45,8 +47,6 @@ services:
       retries: 5
     cap_add:
       - SYS_NICE # CAP_SYS_NICE
-    networks:
-      - app
     secrets:
       - DB_USER
       - DB_PASS
@@ -61,26 +61,26 @@ services:
 
 secrets:
   APP_PORT:
-    file: ./secrets/APP_PORT
+    file: ./src/secrets/APP_PORT
   APP_PROTOCOL:
-    file: ./secrets/APP_PROTOCOL
+    file: ./src/secrets/APP_PROTOCOL
   APP_HOST:
-    file: ./secrets/APP_HOST
+    file: ./src/secrets/APP_HOST
   BCRYPT_SALT:
-    file: ./secrets/BCRYPT_SALT
+    file: ./src/secrets/BCRYPT_SALT
   BCRYPT_MAX_BYTES:
-    file: ./secrets/BCRYPT_MAX_BYTES
+    file: ./src/secrets/BCRYPT_MAX_BYTES
   JWT_SECRET:
-    file: ./secrets/JWT_SECRET
+    file: ./src/secrets/JWT_SECRET
   DB_HOST:
-    file: ./secrets/DB_HOST
+    file: ./src/secrets/DB_HOST
   DB_USER:
-    file: ./secrets/DB_USER
+    file: ./src/secrets/DB_USER
   DB_PASS:
-    file: ./secrets/DB_PASS
+    file: ./src/secrets/DB_PASS
   DB_NAME:
-    file: ./secrets/DB_NAME
+    file: ./src/secrets/DB_NAME
   DB_PORT:
-    file: ./secrets/DB_PORT
+    file: ./src/secrets/DB_PORT
   DATABASE_URL:
-    file: ./secrets/DATABASE_URL
+    file: ./src/secrets/DATABASE_URL

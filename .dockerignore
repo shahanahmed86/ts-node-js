@@ -5,5 +5,5 @@ Dockerfile
 .gitignore
 docker-compose*
 .env*
-secrets
-expose_env.sh
+src/secrets
+Makefile

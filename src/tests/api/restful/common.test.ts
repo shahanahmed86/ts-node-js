@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { BASE_URL } from '../../../config';
+import httpServer from '../../../';
 import { GENDER_OPTIONS } from '../../../utils/constants.utils';
 import { commonHelper } from '../../helper';
 
@@ -47,7 +47,7 @@ describe('RESTful - Common APIs', function () {
 	});
 
 	it('get gender', async () => {
-		const { body, error, status } = await chai.request(BASE_URL).get('/api/common/gender');
+		const { body, error, status } = await chai.request(httpServer).get('/api/common/gender');
 
 		GENDER_OPTIONS.map((gender) => expect(body).to.be.an('array').that.include(gender));
 		expect(error).to.be.false;

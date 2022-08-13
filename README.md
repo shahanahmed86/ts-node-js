@@ -1,4 +1,4 @@
-# @shahanahmed86/ts-node-js
+# @shahanahmed86/ts-app
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@
 
 ```sh
 # Clone
-git clone git@github.com:shahanahmed86/ts-node-js.git && cd ts-node-js
+git clone git@github.com:shahanahmed86/ts-app.git && cd ts-app
 
 # to initiate the server run
 node setup
@@ -48,7 +48,7 @@ npm run down:prod # end
 ## server
 ```sh
 # execute bash inside of the container
-docker exec -it ts-node-js_server_1 bash
+docker exec -it ts-app_server_1 bash
 
 # migrations can only run in development environment
 # because start script has a pre script that run migration for it
@@ -64,10 +64,10 @@ make run-migration
 
 ```sh
 # execute bash inside of the container
-docker exec -it ts-node-js_mysqldb_1 bash
+docker exec -it ts-app_mysqldb_1 bash
 
 # execute  open mysql
-docker exec -it ts-node-js_mysqldb_1 mysql -u<user> -p<password> -h<host> <name>
+docker exec -it ts-app_mysqldb_1 mysql -u<user> -p<password> -h<host> <name>
 
 # <name> is the database name
 

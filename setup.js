@@ -86,7 +86,7 @@ const questions = [
 		if (forceReInstall) {
 			if (fs.existsSync('node_modules')) fs.rmSync('node_modules', { recursive: true });
 			if (fs.existsSync('.husky/_')) fs.rmSync('.husky/_', { recursive: true });
-			if (fs.existsSync('secrets')) fs.rmSync('secrets', { recursive: true });
+			if (fs.existsSync('src/secrets')) fs.rmSync('src/secrets', { recursive: true });
 			if (fs.existsSync('.env')) fs.rmSync('.env');
 		}
 
@@ -109,9 +109,9 @@ const questions = [
 		await insertContent(envs, `\nDATABASE_URL=${databaseUrl}`);
 
 		allVars = getJSON('.env');
-		if (!fs.existsSync('secrets')) fs.mkdirSync('secrets');
+		if (!fs.existsSync('src/secrets')) fs.mkdirSync('src/secrets');
 		Object.keys(allVars).forEach((k) => {
-			if (!fs.existsSync(`secrets/${k}`)) fs.appendFileSync(`secrets/${k}`, allVars[k]);
+			if (!fs.existsSync(`src/secrets/${k}`)) fs.appendFileSync(`src/secrets/${k}`, allVars[k]);
 		});
 
 		coloredLogs('Setup Finished', undefined, true);
@@ -169,7 +169,7 @@ function getJSON(filePath, separate = '=') {
 }
 
 function shouldInstallModules() {
-	if (!fs.existsSync('node_modules')) executeCommand('npm install');
+	if (!fs.existsSync('node_modules')) executeCommand('npm ci');
 }
 
 function insertContent(envs, content) {

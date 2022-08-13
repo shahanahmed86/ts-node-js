@@ -1,7 +1,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { GenderType } from '../../../types/common.types';
-import { BASE_URL } from '../../../config';
+import httpServer from '../../../';
+
 chai.use(chaiHttp);
 
 export const signup = async (
@@ -14,7 +15,7 @@ export const signup = async (
 	gender?: GenderType,
 ) => {
 	return chai
-		.request(BASE_URL)
+		.request(httpServer)
 		.post('/api/user/auth/register')
 		.set('content-type', 'application/json')
 		.send({ username, password, avatar, fullName, email, cell, gender });
@@ -22,7 +23,7 @@ export const signup = async (
 
 export const login = async (username: string = 'test-user', password: string = '123Abc456') => {
 	return chai
-		.request(BASE_URL)
+		.request(httpServer)
 		.post('/api/user/auth')
 		.set('content-type', 'application/json')
 		.send({ username, password });
@@ -30,7 +31,7 @@ export const login = async (username: string = 'test-user', password: string = '
 
 export const loggedIn = (token: string) => {
 	return chai
-		.request(BASE_URL)
+		.request(httpServer)
 		.get(`/api/user/auth`)
 		.set('content-type', 'application/json')
 		.set('Authorization', `Bearer ${token}`);
@@ -38,7 +39,7 @@ export const loggedIn = (token: string) => {
 
 export const changePassword = async (oldPassword: string, password: string, token: string) => {
 	return chai
-		.request(BASE_URL)
+		.request(httpServer)
 		.put('/api/user/auth')
 		.set('content-type', 'application/json')
 		.set('Authorization', `Bearer ${token}`)

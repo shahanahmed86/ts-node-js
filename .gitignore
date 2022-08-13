@@ -110,7 +110,4 @@ _builds
 src/uploads
 
 # docker secrets
-/secrets
-
-# prisma
-/prisma/migrations
+src/secrets

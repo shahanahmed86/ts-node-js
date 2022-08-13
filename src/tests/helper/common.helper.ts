@@ -1,21 +1,17 @@
 import fs from 'fs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { BASE_URL } from '../../config';
-import { PrismaClient } from '@prisma/client';
+import httpServer from '../../';
 import * as userHelper from '../api/restful/user.helper';
-
-const prisma = new PrismaClient({
-	datasources: { db: { url: 'mysql://root:prisma@localhost:3306/mydb' } },
-});
+import { prisma } from '../../library/prisma.library';
 
 chai.use(chaiHttp);
 
-export const healthcheck = () => chai.request(BASE_URL).get('/api/healthcheck');
+export const healthcheck = () => chai.request(httpServer).get('/api/healthcheck');
 
 export const uploadImage = (imagePath: string = './src/assets/appstore.png') => {
 	return chai
-		.request(BASE_URL)
+		.request(httpServer)
 		.post('/api/common/image')
 		.set('content-type', 'multipart/form-data')
 		.attach('uploadedFile', fs.readFileSync(imagePath), {
@@ -25,11 +21,11 @@ export const uploadImage = (imagePath: string = './src/assets/appstore.png') => 
 };
 
 export const getImage = (filename: string) => {
-	return chai.request(BASE_URL).get(`/api/common/image?filename=${filename}`);
+	return chai.request(httpServer).get(`/api/common/image?filename=${filename}`);
 };
 
 export const deleteImage = (filename: string) => {
-	return chai.request(BASE_URL).delete(`/api/common/image?filename=${filename}`);
+	return chai.request(httpServer).delete(`/api/common/image?filename=${filename}`);
 };
 
 export const hardDelete = async () => {

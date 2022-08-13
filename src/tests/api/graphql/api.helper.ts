@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { BASE_URL } from '../../../config';
+import httpServer from '../../../';
 
 chai.use(chaiHttp);
 
@@ -12,7 +12,7 @@ type Payload = {
 };
 export const callGraphqlApi = (payload: Payload) => {
 	return chai
-		.request(BASE_URL)
+		.request(httpServer)
 		.post('/graphql')
 		.set('content-type', 'application/json')
 		.send(payload);

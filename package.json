@@ -7,34 +7,39 @@
 		"prepare": "echo 'installing husky....' && husky install",
 		"prebuild": "npm run db:generate && rm -rf dist",
 		"build": "tsc",
-		"prestart": "npm run db:deploy",
+		"prestart": "npm run db:generate && npm run db:deploy && npm run db:seed",
 		"start": "cross-env NODE_ENV='production' node dist/index.js",
 		"dev": "cross-env NODE_ENV='development' nodemon --ignore 'tests/**/*.ts' --exec ts-node index.ts",
-		"up:dev": "make run-dev-up",
-		"up:prod": "make run-prod-up",
-		"down:dev": "make run-dev-down",
-		"down:dev_hard": "make run-dev-down-hard",
-		"down:prod": "make run-prod-down",
-		"db:format": "prisma format",
-		"db:generate": "prisma generate",
-		"predb:deploy": "npm run db:format",
-		"db:deploy": "prisma migrate dev --name init",
-		"postdb:deploy": "npm run db:seed",
-		"db:seed": "prisma db seed",
+		"dev:up": "make run-dev-up",
+		"dev:up_build": "make run-dev-up-rebuild",
+		"dev:down": "make run-dev-down",
+		"dev:down_hard": "make run-dev-down-hard",
+		"prod:up": "make run-prod-up",
+		"prod:down": "make run-prod-down",
+		"predb:dev": "prisma format",
+		"db:dev": "prisma migrate dev --name init",
+		"postdb:dev": "npm run db:seed",
 		"db:reset": "prisma migrate reset",
+		"db:generate": "prisma generate",
+		"db:deploy": "prisma migrate deploy",
+		"db:seed": "prisma db seed",
 		"prettify": "prettier --no-editorconfig -l --write '**/*.ts'",
 		"lint": "eslint '**/*.ts'",
-		"test": "mocha -r ts-node/register 'src/tests/**/*.test.ts' --exit"
+		"exec-tests": "make run-test-up",
+		"postexec-tests": "make run-test-down",
+		"pretest": "npm run db:generate && npm run db:deploy && npm run db:seed",
+		"test": "mocha -r ts-node/register 'src/tests/**/*.test.ts'"
 	},
 	"lint-staged": {
 		"**/*.ts": [
 			"npm run prettify",
 			"npm run lint",
-			"npm run test"
+			"npm run exec-tests"
 		]
 	},
 	"prisma": {
-		"seed": "node prisma/seed.js"
+		"schema": "./src/prisma/schema.prisma",
+		"seed": "node ./src/prisma/seed.js"
 	},
 	"repository": {
 		"type": "git",
@@ -56,7 +61,6 @@
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"@types/chai": "^4.3.1",
-		"@types/chai-http": "^4.2.0",
 		"@types/cors": "^2.8.12",
 		"@types/express": "^4.17.13",
 		"@types/express-fileupload": "^1.2.3",

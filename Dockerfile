@@ -9,29 +9,30 @@ RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
 USER node
 COPY --chown=node:node ./package*.json ./
-RUN npm ci --omit=dev \
-  && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
-HEALTHCHECK --interval=30s --retries=5 --timeout=5s CMD node /app/healthchecks/server-healthcheck.js
+HEALTHCHECK --interval=30s --retries=5 --timeout=5s CMD node /app/src/healthchecks/server-healthcheck.js
 
-# dev stage (no source added, assumes bind mount)
+### dev stage
 FROM base as dev
 ENV NODE_ENV=development
 ENV PATH=/app/node_modules/.bin:$PATH
-RUN npm cache clean --force && npm install
+RUN npm ci && npm cache clean --force
 COPY --chown=node:node . .
 RUN npm run build
 CMD ["npm", "run", "dev"]
 
-# copy in source code for test and prod stages
-# we do this in its own stage to ensure the
-# layers we test are the exact hashed layers the cache
-# uses to build prod stage
+### test stage
+FROM dev as test
+ENV NODE_ENV=test
+CMD ["npm", "run", "test"]
+
 FROM base as source
+
 COPY --chown=node:node . .
 COPY --from=dev /app/dist ./dist
 
-### prod stage
+### production stage
 FROM source as prod
 CMD [ "npm", "run", "start" ]
