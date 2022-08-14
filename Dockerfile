@@ -25,8 +25,8 @@ CMD ["npm", "run", "dev"]
 
 ### test stage
 FROM dev as test
-ENV NODE_ENV=test
-CMD ["npm", "run", "test"]
+ENV NODE_ENV=development
+CMD ["npm", "run", "exec-tests"]
 
 FROM base as source
 

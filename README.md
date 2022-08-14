@@ -36,13 +36,14 @@ node setup
 --force-reinstall || -F # to reinstall
 
 # development mode
-npm run up:dev # start
-npm run down:dev # end
+npm run dev:up # start
+npm run dev:up_build # start --rebuild
+npm run dev:down # end
 npm run down:dev_hard # end with clearing data from the database
 
 # production mode
-npm run up:prod # start
-npm run down:prod # end
+npm run prod:up # start
+npm run prod:down # end
 ```
 
 ## server
@@ -58,6 +59,11 @@ docker exec -it ts-app_server_1 bash
 DATABASE_URL="mysql://root:prisma@localhost:3306/mydb" npm run db:deploy
 # or replace the run-migration value in the Makefile like above and run
 make run-migration
+
+# to run test cases while development run like:
+DATABASE_URL="mysql://root:prisma@localhost:3306/mydb" npm run --ignore-scripts exec-tests
+# or replace the run-test value in the Makefile like above and run
+make run-test
 ```
 
 ## mysql

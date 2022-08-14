@@ -10,7 +10,7 @@ services:
       context: .
       target: test
     restart: on-failure
-    command: npm run test
+    command: npm run exec-tests
 
   mysqldb:
     tty: true

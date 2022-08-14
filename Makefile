@@ -1,7 +1,5 @@
 run-dev-up:
 	docker-compose -p ts-app -f docker-compose.yml -f docker-compose.dev.yml up -d
-run-dev-up-rebuild:
-	docker-compose -p ts-app -f docker-compose.yml -f docker-compose.dev.yml up -dV --build --no-deps server
 run-dev-down:
 	docker-compose -p ts-app -f docker-compose.yml -f docker-compose.dev.yml down
 run-dev-down-hard:
@@ -17,5 +15,8 @@ run-prod-up:
 run-prod-down:
 	docker stack rm ts-app
 
+# only for dev environment
 run-migration:
 	DATABASE_URL="mysql://root:prisma@localhost:3306/mydb" npm run db:dev
+run-test:
+	DATABASE_URL="mysql://root:prisma@localhost:3306/mydb" npm run --ignore-scripts exec-tests

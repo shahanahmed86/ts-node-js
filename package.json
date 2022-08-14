@@ -11,7 +11,7 @@
 		"start": "cross-env NODE_ENV='production' node dist/index.js",
 		"dev": "cross-env NODE_ENV='development' nodemon --ignore 'tests/**/*.ts' --exec ts-node index.ts",
 		"dev:up": "make run-dev-up",
-		"dev:up_build": "make run-dev-up-rebuild",
+		"postdev:up": "make run-migration",
 		"dev:down": "make run-dev-down",
 		"dev:down_hard": "make run-dev-down-hard",
 		"prod:up": "make run-prod-up",
@@ -25,16 +25,16 @@
 		"db:seed": "prisma db seed",
 		"prettify": "prettier --no-editorconfig -l --write '**/*.ts'",
 		"lint": "eslint '**/*.ts'",
-		"exec-tests": "make run-test-up",
-		"postexec-tests": "make run-test-down",
-		"pretest": "npm run db:generate && npm run db:deploy && npm run db:seed",
-		"test": "mocha -r ts-node/register 'src/tests/**/*.test.ts'"
+		"test": "make run-test-up",
+		"posttest": "make run-test-down",
+		"preexec-tests": "npm run db:deploy && npm run db:seed",
+		"exec-tests": "mocha -r ts-node/register 'src/tests/**/*.test.ts' --exit"
 	},
 	"lint-staged": {
 		"**/*.ts": [
 			"npm run prettify",
 			"npm run lint",
-			"npm run exec-tests"
+			"npm run test"
 		]
 	},
 	"prisma": {
