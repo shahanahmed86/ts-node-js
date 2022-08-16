@@ -33,6 +33,7 @@ app.get('/api/healthcheck', (req, res) => {
 	res.status(200).send(`I am happy and healthy, from host ${os.hostname}!\n`);
 });
 
+console.log('updated...');
 // middleware(s) for error handling
 app.use(notFound);
 

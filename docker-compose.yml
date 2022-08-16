@@ -51,13 +51,11 @@ services:
       - DB_USER
       - DB_PASS
       - DB_NAME
-      - DB_PORT
     environment:
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/DB_PASS
       - MYSQL_DATABASE_FILE=/run/secrets/DB_NAME
       - MYSQL_USER_FILE=/run/secrets/DB_USER
       - MYSQL_PASSWORD_FILE=/run/secrets/DB_PASS
-      - DB_PORT_FILE=/run/secrets/DB_PORT
 
 secrets:
   APP_PORT:

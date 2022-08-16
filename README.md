@@ -20,13 +20,13 @@
 - User authentication APIs
 - File Upload with express-fileupload
 - Pre-commit hook to check linting/testing and formatting
-- Chai & Mocha used to cover unit testing
+- Chai & Mocha used to cover unit/api testing
 
 ## Installation
 
 ```sh
 # Clone
-git clone git@github.com:shahanahmed86/ts-app.git && cd ts-app
+git clone git@github.com:shahanahmed86/ts-app.git && cd ts-app-main
 
 # to initiate the server run
 node setup
@@ -37,13 +37,12 @@ node setup
 
 # development mode
 npm run dev:up # start
-npm run dev:up_build # start --rebuild
 npm run dev:down # end
 npm run down:dev_hard # end with clearing data from the database
 
 # production mode
-npm run prod:up # start
-npm run prod:down # end
+make run-prod-up # start
+make run-prod-down # end
 ```
 
 ## server
