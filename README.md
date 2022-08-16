@@ -90,3 +90,28 @@ git commit -m "message" --no-verify
 --no-verify # it will not call pre-hook of commit where tests/linting will execute
 
 ```
+
+## Development hacks
+```sh
+# ec2 or any other instance of linux
+echo "Host ssh-app
+  StrictHostKeyChecking no
+  Hostname <ip>
+  User <user>
+  IdentityFile <path/to/file.pem>\n" >> ~/.ssh/config
+
+# to ssh into a system run this in your terminal
+ssh ssh-app
+
+# make short aliases to run big commands
+alias make_server_image="docker build -t 127.0.0.1:5000/ts-app:0.0.1 path/to/project-folder && docker push 127.0.0.1:5000/ts-app:0.0.1 && docker save -o path/to/image.tar 127.0.0.1:5000/ts-app"
+# an alias can also call another alias
+alias ssh_deploy_server_prod="make_server_image && scp path/to/image.tar ssh-app:image.tar && ssh ssh-app 'docker load -i image.tar && cd path/to/project && git pull && make run-prod-up'"
+
+# I preferred uploading image.tar to server rather than
+# running an docker build on the server
+
+# Now only need to know is to run the aliases which you've created.
+```
+NOTE: in order to avoid prompt on git pull command on ssh_deploy_server_prod alias you need add ssh id_rsa.pub key to your github  authorized ssh keys or any other hub follow this link
+[SSH Keys](https://github.com/settings/keys 'https://github.com/settings/keys')

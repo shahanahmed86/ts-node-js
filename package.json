@@ -14,8 +14,6 @@
 		"postdev:up": "make run-migration",
 		"dev:down": "make run-dev-down",
 		"dev:down_hard": "make run-dev-down-hard",
-		"prod:up": "make run-prod-up",
-		"prod:down": "make run-prod-down",
 		"predb:dev": "prisma format",
 		"db:dev": "prisma migrate dev --name init",
 		"postdb:dev": "npm run db:seed",
