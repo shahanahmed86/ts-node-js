@@ -7,7 +7,7 @@ services:
       mysqldb:
         condition: service_healthy
     build:
-      context: .
+      context: ../
       target: test
     restart: on-failure
     command: npm run exec-tests

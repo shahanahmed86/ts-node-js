@@ -12,7 +12,7 @@ COPY --chown=node:node ./package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
-HEALTHCHECK --interval=30s --retries=5 --timeout=5s CMD node /app/src/healthchecks/server-healthcheck.js
+HEALTHCHECK --retries=5 --timeout=5s CMD node /app/healthchecks/server-healthcheck.js
 
 ### dev stage
 FROM base as dev

@@ -86,7 +86,9 @@ const questions = [
 		if (forceReInstall) {
 			if (fs.existsSync('node_modules')) fs.rmSync('node_modules', { recursive: true });
 			if (fs.existsSync('.husky/_')) fs.rmSync('.husky/_', { recursive: true });
-			if (fs.existsSync('src/secrets')) fs.rmSync('src/secrets', { recursive: true });
+			if (fs.existsSync('docker-compose/secrets')) {
+				fs.rmSync('docker-compose/secrets', { recursive: true });
+			}
 			if (fs.existsSync('.env')) fs.rmSync('.env');
 		}
 
@@ -109,9 +111,11 @@ const questions = [
 		await insertContent(envs, `\nDATABASE_URL=${databaseUrl}`);
 
 		allVars = getJSON('.env');
-		if (!fs.existsSync('src/secrets')) fs.mkdirSync('src/secrets');
+		if (!fs.existsSync('docker-compose/secrets')) fs.mkdirSync('docker-compose/secrets');
 		Object.keys(allVars).forEach((k) => {
-			if (!fs.existsSync(`src/secrets/${k}`)) fs.appendFileSync(`src/secrets/${k}`, allVars[k]);
+			if (!fs.existsSync(`docker-compose/secrets/${k}`)) {
+				fs.appendFileSync(`docker-compose/secrets/${k}`, allVars[k]);
+			}
 		});
 
 		coloredLogs('Setup Finished', undefined, true);

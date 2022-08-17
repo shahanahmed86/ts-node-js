@@ -35,6 +35,10 @@ node setup
 --yes || -Y # to skip question and go with default options
 --force-reinstall || -F # to reinstall
 
+# make a docker image
+make build-image
+make run-dev-up-rebuild
+
 # development mode
 npm run dev:up # start
 npm run dev:down # end
@@ -109,9 +113,10 @@ alias make_server_image="docker build -t 127.0.0.1:5000/ts-app:0.0.1 path/to/pro
 alias ssh_deploy_server_prod="make_server_image && scp path/to/image.tar ssh-app:image.tar && ssh ssh-app 'docker load -i image.tar && cd path/to/project && git pull && make run-prod-up'"
 
 # I preferred uploading image.tar to server rather than
-# running an docker build on the server
+# building a docker build on the server because it will be
+# consuming server resources
 
 # Now only need to know is to run the aliases which you've created.
 ```
-NOTE: in order to avoid prompt on git pull command on ssh_deploy_server_prod alias you need add ssh id_rsa.pub key to your github  authorized ssh keys or any other hub follow this link
+NOTE: in order to avoid prompt on git pull command on ssh_deploy_server_prod alias you need add ssh id_rsa.pub key to your github authorized SSH Keys
 [SSH Keys](https://github.com/settings/keys 'https://github.com/settings/keys')

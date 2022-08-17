@@ -107,7 +107,7 @@ dist
 _builds
 
 # uploads
-src/uploads
+uploads
 
 # docker secrets
-src/secrets
+secrets

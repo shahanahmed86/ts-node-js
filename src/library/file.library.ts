@@ -5,7 +5,7 @@ import { convertUnknownIntoError, getUniqueId } from '../utils/logics.utils';
 import { NotFound } from '../utils/errors.utils';
 
 class File {
-	path = './src/uploads';
+	path = './uploads';
 
 	get uuid(): string {
 		return getUniqueId();
@@ -29,12 +29,10 @@ class File {
 
 	deleteOldFileLocally(imagePath: string): boolean {
 		const path = `${this.path}/${imagePath}`;
-		if (fs.existsSync(path)) {
-			fs.unlinkSync(path);
-			return true;
-		}
+		if (!fs.existsSync(path)) return false;
 
-		return false;
+		fs.unlinkSync(path);
+		return true;
 	}
 
 	getFileBuffer(imagePath: string): Buffer {
