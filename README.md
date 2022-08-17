@@ -52,7 +52,7 @@ make run-prod-down # end
 ## server
 ```sh
 # execute bash inside of the container
-docker exec -it ts-app_server_1 bash
+docker exec -it <container_name> bash
 
 # migrations can only run in development environment
 # because start script has a pre script that run migration for it
@@ -73,10 +73,10 @@ make run-test
 
 ```sh
 # execute bash inside of the container
-docker exec -it ts-app_mysqldb_1 bash
+docker exec -it <container_name> bash
 
 # execute  open mysql
-docker exec -it ts-app_mysqldb_1 mysql -u<user> -p<password> -h<host> <name>
+docker exec -it <container_name> mysql -u<user> -p<password> -h<host> <name>
 
 # <name> is the database name
 
@@ -92,7 +92,12 @@ docker exec -it ts-app_mysqldb_1 mysql -u<user> -p<password> -h<host> <name>
 git commit -m "message" --no-verify
 # flags
 --no-verify # it will not call pre-hook of commit where tests/linting will execute
+```
 
+## nginx
+```sh
+# to reload nginx run this command
+docker exec <container> nginx -s reload
 ```
 
 ## Development hacks
@@ -104,17 +109,21 @@ echo "Host ssh-app
   User <user>
   IdentityFile <path/to/file.pem>\n" >> ~/.ssh/config
 
-# to ssh into a system run this in your terminal
+# to ssh into the server, run this in your terminal
 ssh ssh-app
 
-# make short aliases to run big commands
-alias make_server_image="docker build -t 127.0.0.1:5000/ts-app:0.0.1 path/to/project-folder && docker push 127.0.0.1:5000/ts-app:0.0.1 && docker save -o path/to/image.tar 127.0.0.1:5000/ts-app"
-# an alias can also call another alias
+# you can make an alias in your bashrc or zshrc file or create
+# the script in the Makefile
+
+# make short aliases to run bigger commands
+alias make_server_image="docker build -t <image_name>:<tag> path/to/project-folder && docker push <image_name>:<tag> && docker save -o path/to/image.tar <image_name>:<tag>"
+
+# an alias can also be called in another alias
 alias ssh_deploy_server_prod="make_server_image && scp path/to/image.tar ssh-app:image.tar && ssh ssh-app 'docker load -i image.tar && cd path/to/project && git pull && make run-prod-up'"
 
-# I preferred uploading image.tar to server rather than
-# building a docker build on the server because it will be
-# consuming server resources
+# I preferred uploading tar file of the docker image to the 
+# server rather than building a docker build on it because
+# it will be consuming server resources.
 
 # Now only need to know is to run the aliases which you've created.
 ```
