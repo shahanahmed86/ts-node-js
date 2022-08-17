@@ -38,12 +38,10 @@ app.get('/api/healthcheck', (req, res) => {
 // serving builds
 const buildsStatic = path.resolve(__dirname, '_builds');
 if (!fs.existsSync(buildsStatic)) fs.mkdirSync(buildsStatic);
-console.log('fs.existsSync(buildsStatic)....', fs.existsSync(buildsStatic));
 
 app.use(express.static(buildsStatic));
 
 const builds = fs.readdirSync(buildsStatic);
-console.log('builds...', builds);
 builds.forEach((file) => {
 	const isDirectory = fs.statSync(path.join(buildsStatic, file)).isDirectory();
 	if (isDirectory) {
