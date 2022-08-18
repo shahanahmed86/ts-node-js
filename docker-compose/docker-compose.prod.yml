@@ -29,9 +29,9 @@ services:
         parallelism: 0
         order: stop-first
       restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
         window: 120s
 
   mysqldb:
