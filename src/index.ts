@@ -32,4 +32,4 @@ server.start().then(() => {
 	});
 });
 
-// export default httpServer;
+export default httpServer;
