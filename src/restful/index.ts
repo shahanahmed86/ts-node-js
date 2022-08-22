@@ -36,7 +36,7 @@ app.get('/api/healthcheck', (req, res) => {
 });
 
 // serving builds
-const buildsStatic = path.resolve(__dirname, '_builds');
+const buildsStatic = path.resolve('./builds');
 if (!fs.existsSync(buildsStatic)) fs.mkdirSync(buildsStatic);
 
 app.use(express.static(buildsStatic));

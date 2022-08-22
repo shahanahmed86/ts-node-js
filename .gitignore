@@ -104,7 +104,7 @@ dist
 .husky/_
 
 # builds
-_builds
+builds
 
 # uploads
 uploads

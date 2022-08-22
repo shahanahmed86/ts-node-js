@@ -32,16 +32,15 @@ services:
       - DB_NAME_FILE=/run/secrets/DB_NAME
       - DB_PORT_FILE=/run/secrets/DB_PORT
       - DATABASE_URL_FILE=/run/secrets/DATABASE_URL
+    volumes:
+      - ../builds:/app/builds
 
   mysqldb:
     networks:
       - app
-    image: mysql:8-oracle
-    volumes:
-      - ../healthchecks/mysql-healthcheck.sh:/healthcheck
     command: --authentication_policy=mysql_native_password
     healthcheck:
-      test: /healthcheck
+      test: /healthcheck.sh
       interval: 11s
       timeout: 5s
       retries: 5

@@ -7,7 +7,6 @@
 		"prepare": "echo 'installing husky....' && husky install",
 		"prebuild": "rm -rf dist && npm run db:generate",
 		"build": "tsc",
-		"postbuild": "cp -r src/restful/_builds dist/src/restful/_builds",
 		"prestart": "npm run db:generate && npm run db:deploy && npm run db:seed",
 		"start": "cross-env NODE_ENV='production' node dist/index.js",
 		"dev": "cross-env NODE_ENV='development' nodemon --ignore 'tests/**/*.ts' --exec ts-node index.ts",

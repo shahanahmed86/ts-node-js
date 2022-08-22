@@ -21,18 +21,28 @@ ENV PATH=/app/node_modules/.bin:$PATH
 RUN npm ci && npm cache clean --force
 COPY --chown=node:node . .
 RUN npm run build
-CMD ["npm", "run", "dev"]
 
 ### test stage
 FROM dev as test
 ENV NODE_ENV=development
-CMD ["npm", "run", "exec-tests"]
 
 FROM base as source
 
 COPY --chown=node:node . .
 COPY --from=dev /app/dist ./dist
 
+### nginx
+FROM nginx:1.23 as web
+
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/default.html /usr/share/nginx/html/index.html
+
+### mysql
+FROM mysql:8-oracle as mysql
+
+# COPY ./dump.sql /docker-entrypoint-initdb.d/dump.sql
+COPY ./healthchecks/mysql-healthcheck.sh /healthcheck.sh
+
 ### production stage
 FROM source as prod
-CMD [ "npm", "run", "start" ]
+CMD [ "node", "index.js" ]

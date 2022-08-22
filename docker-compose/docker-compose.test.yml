@@ -9,12 +9,15 @@ services:
     build:
       context: ../
       target: test
-    restart: on-failure
+    restart: 'no'
     command: npm run exec-tests
 
   mysqldb:
     tty: true
-    restart: on-failure
+    build:
+      context: ../
+      target: mysql
+    restart: 'no'
     volumes:
       - mysql_test:/var/lib/mysql
 
