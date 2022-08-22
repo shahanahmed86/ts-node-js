@@ -19,6 +19,6 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: node setup -FY
-      - run: npm run prettier
+      - run: npm run prettify
       - run: npm run lint
       - run: npm run test
