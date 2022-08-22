@@ -35,8 +35,10 @@ node setup
 --yes || -Y # to skip question and go with default options
 --force-reinstall || -F # to reinstall
 
-# make a docker image
-make build-image
+# make a docker image, you can call multiple make script like this
+make create-web-image create-mysql-image create-server-image
+
+# to rebuild the image
 make run-dev-up-rebuild
 
 # development mode
