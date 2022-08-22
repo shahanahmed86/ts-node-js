@@ -1,4 +1,4 @@
-name: Node.js CI
+name: NodeJs CI
 
 on:
   pull_request:
@@ -13,10 +13,12 @@ jobs:
         node-version: [14.x]
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use NodeJs ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: 14
           cache: 'npm'
       - run: node setup -FY
+      - run: npm run prettier
+      - run: npm run lint
       - run: npm run test
