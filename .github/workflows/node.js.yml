@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ['master']
   pull_request:
-    branches: [ "master" ]
+    branches: ['master']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,21 +25,5 @@ jobs:
         with:
           node-version: 14
           cache: 'npm'
-      - run: npm ci
-      - run: npm run prettify
-      - run: npm run lint
-      - run: npm test
-    env:
-      APP_PORT: ${{ secrets.APP_PORT }}
-      NODE_ENV: ${{ secrets.NODE_ENV }}
-      APP_PROTOCOL: ${{ secrets.APP_PROTOCOL }}
-      APP_HOST: ${{ secrets.APP_HOST }}
-      BCRYPT_SALT: ${{ secrets.BCRYPT_SALT }}
-      BCRYPT_MAX_BYTES: ${{ secrets.BCRYPT_MAX_BYTES }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASS: ${{ secrets.DB_PASS }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - run: node setup -FY
+      - run: npm run test
