@@ -1,3 +1,1 @@
-const User = {};
-
-export default User;
+export const User = {};
