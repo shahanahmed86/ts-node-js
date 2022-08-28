@@ -7,11 +7,11 @@ import { MORGAN_TOKENS } from '../utils/constants.utils';
 
 morgan.token('host', os.hostname);
 morgan.token('error', (req: IRequest) => (req.error ? req.error.message : ''));
-const errorStream = fs.createWriteStream('./logs/error.log', { flags: 'a' });
+const errorStream = IN_PROD ? fs.createWriteStream('./logs/error.log', { flags: 'a' }) : undefined;
 
 const logger = morgan(MORGAN_TOKENS, {
 	skip: (_, res) => (IN_PROD ? res.statusCode < 400 : false),
-	stream: IN_PROD ? errorStream : undefined,
+	stream: errorStream,
 });
 
 export default logger;
