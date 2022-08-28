@@ -1,3 +1,1 @@
-const SignUp = {};
-
-export default SignUp;
+export const SignUp = {};

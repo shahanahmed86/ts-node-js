@@ -1,3 +1,1 @@
-const Admin = {};
-
-export default Admin;
+export const Admin = {};

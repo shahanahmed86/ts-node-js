@@ -11,6 +11,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphqlCatch as formatError } from './utils/errors.utils';
 
 let schema = makeExecutableSchema({ typeDefs, resolvers });
+
 Object.entries(directives).forEach(([key, directive]): void => {
 	schema = directive(schema, key);
 });
