@@ -15,7 +15,7 @@ services:
       restart_policy:
         condition: any
         delay: 10s
-        max_attempts: 5
+        max_attempts: 10
         window: 120s
     depends_on:
       - server
@@ -24,11 +24,13 @@ services:
     image: 127.0.0.1:5000/ts-app-web
     ports:
       - 80:80
-    
 
   server:
     image: 127.0.0.1:5000/ts-app-server
     command: npm run start
+    volumes:
+      - ../uploads:/app/uploads:rw
+      - ../logs:/app/logs:rw
     deploy:
       replicas: 3
       update_config:
@@ -42,7 +44,7 @@ services:
       restart_policy:
         condition: any
         delay: 10s
-        max_attempts: 5
+        max_attempts: 10
         window: 120s
 
   mysqldb:
@@ -59,7 +61,7 @@ services:
       restart_policy:
         condition: any
         delay: 10s
-        max_attempts: 5
+        max_attempts: 10
         window: 120s
     volumes:
       - mysql_prod:/var/lib/mysql
