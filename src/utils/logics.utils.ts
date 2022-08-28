@@ -29,7 +29,10 @@ export function includeDeleteParams<T>(where: T): T {
 	return Object.assign(where, { isDeleted: false, deletedAt: null });
 }
 
-export const joiValidator = async (schema: ObjectSchema, payload: any): Promise<any> => {
+export const joiValidator = async (
+	schema: ObjectSchema,
+	payload: { [key: string]: any },
+): Promise<any> => {
 	try {
 		await schema.validateAsync(payload, { abortEarly: false });
 	} catch (e) {
@@ -38,7 +41,13 @@ export const joiValidator = async (schema: ObjectSchema, payload: any): Promise<
 	}
 };
 
-export const omitProps = (obj: object, props?: string[]) => _.omit(obj, props || SHOULD_OMIT_PROPS);
+export const omitProps = (obj: { [key: string]: any }, props: string[] = SHOULD_OMIT_PROPS) => {
+	const objectKey = Object.keys(obj).find(
+		(key) => obj[key] && typeof key === 'object' && !(obj[key] instanceof Date),
+	);
+	if (objectKey) return _.omit(obj[objectKey], props);
+	return _.omit(obj, props);
+};
 
 export const getUserType: GetUserType = (userTypes) => {
 	const { shouldAdmin, shouldUser } = userTypes;

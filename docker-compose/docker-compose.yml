@@ -34,6 +34,8 @@ services:
       - DATABASE_URL_FILE=/run/secrets/DATABASE_URL
     volumes:
       - ../builds:/app/builds
+      - ../uploads:/app/uploads
+      - ../logs:/app/logs
 
   mysqldb:
     networks:

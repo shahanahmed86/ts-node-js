@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 const PRE_BCRYPT_SALT = process.env.BCRYPT_SALT || '12';
 export const BCRYPT_SALT = parseInt(PRE_BCRYPT_SALT);
 

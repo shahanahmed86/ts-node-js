@@ -1,4 +1,5 @@
-import { decodePayload, Prisma, prisma } from '../../library';
+import { User } from '@prisma/client';
+import { decodePayload, prisma } from '../../library';
 import { KeyIds } from '../../types/common.types';
 import { IRequest } from '../../types/extends.types';
 import { BadRequest, NotAuthenticated, NotAuthorized } from '../../utils/errors.utils';
@@ -43,7 +44,7 @@ export const authController = async (key: KeyIds, req: IRequest) => {
 			break;
 		}
 		case 'userId': {
-			const where: Prisma.UserWhereInput = includeDeleteParams({ id });
+			const where: Partial<User> = includeDeleteParams({ id });
 			const user = await prisma.user.findFirst({ where });
 			if (!user) throw new NotAuthorized();
 			break;

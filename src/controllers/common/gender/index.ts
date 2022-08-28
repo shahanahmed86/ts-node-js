@@ -1,1 +1,1 @@
-export * from './getGender.controller';
+export * from './getOptions.controller';

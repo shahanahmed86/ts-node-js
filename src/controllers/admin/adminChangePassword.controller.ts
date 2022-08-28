@@ -4,12 +4,12 @@ import { ConflictError, NotAuthorized } from '../../utils/errors.utils';
 import { convertUnknownIntoError, joiValidator } from '../../utils/logics.utils';
 import { changePasswordSchema } from '../../validation';
 
-type Args = {
+interface Args {
 	oldPassword: string;
 	password: string;
-};
+}
 
-export const changePassword: Controller<null, Args, string> = async (root, args, { req }) => {
+export const adminChangePassword: Controller<null, Args, string> = async (root, args, { req }) => {
 	if (!req.adminId) throw new NotAuthorized();
 
 	try {

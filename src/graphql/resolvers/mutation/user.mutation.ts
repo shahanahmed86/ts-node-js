@@ -1,10 +1,9 @@
 import { userController } from '../../../controllers';
-import { graphqlWrapper } from '../../../utils/wrapper.utils';
 
 const user = {
-	userLogin: graphqlWrapper(userController.login),
-	userChangePassword: graphqlWrapper(userController.changePassword),
-	userSignUp: graphqlWrapper(userController.register),
+	userLogin: userController.userLogin,
+	userChangePassword: userController.userChangePassword,
+	userSignUp: userController.userSignUp,
 };
 
 export default user;

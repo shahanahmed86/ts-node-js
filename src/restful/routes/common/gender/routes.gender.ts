@@ -4,6 +4,6 @@ import { restWrapper } from '../../../../utils/wrapper.utils';
 
 const router = Router();
 
-router.get('/', restWrapper(commonController.getGenderOptions));
+router.get('/', restWrapper(commonController.genderOptions));
 
 export default router;

@@ -35,11 +35,11 @@ class File {
 		return true;
 	}
 
-	getFileBuffer(imagePath: string): Buffer {
+	getFilePath(imagePath: string): string {
 		const path = `${this.path}/${imagePath}`;
-		if (fs.existsSync(path)) return fs.readFileSync(path);
+		if (fs.existsSync(path)) return path;
 
-		return fs.readFileSync(`./src/assets/404-image.png`);
+		return './src/assets/404-image.png';
 	}
 
 	moveImageFromTmp(imagePath: string): Promise<string> {

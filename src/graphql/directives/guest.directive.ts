@@ -2,7 +2,6 @@ import { mapSchema, getDirective, MapperKind } from '@graphql-tools/utils';
 import { defaultFieldResolver, GraphQLSchema } from 'graphql';
 import { guestController } from '../../controllers/middleware/auth.controller';
 import { ContextObject } from '../../types/wrapper.types';
-import { graphqlCatch } from '../../utils/errors.utils';
 
 function GuestDirective(schema: GraphQLSchema, directiveName: string) {
 	return mapSchema(schema, {
@@ -13,16 +12,13 @@ function GuestDirective(schema: GraphQLSchema, directiveName: string) {
 			const { resolve = defaultFieldResolver } = field;
 
 			field.resolve = async (...args) => {
-				try {
-					const context: ContextObject = args[2];
+				const context: ContextObject = args[2];
 
-					guestController(context.req);
-				} catch (e) {
-					graphqlCatch(e);
-				}
+				guestController(context.req);
 
 				return resolve.apply(this, args);
 			};
+
 			return field;
 		},
 	});

@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   web:
-    restart: unless-stopped
+    restart: on-failure
     depends_on:
       server:
         condition: service_healthy
@@ -25,7 +25,7 @@ services:
     build:
       context: ../
       target: dev
-    restart: unless-stopped
+    restart: on-failure
     volumes:
       - /app/node_modules
       - ../:/app
@@ -33,7 +33,7 @@ services:
 
   mysqldb:
     tty: true
-    restart: unless-stopped
+    restart: on-failure
     build:
       context: ../
       target: mysql

@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 const PORT = process.env.APP_PORT || '4000';
 export const APP_PORT = parseInt(PORT);

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { BCRYPT_MAX_BYTES } from '../config';
+import { BCRYPT_MAX_BYTES } from '../config/auth.config';
 
 export const usernameSchema = Joi.string().min(3).max(20).trim().label('username');
 export const passwordSchema = Joi.string()

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config';
+import { JWT_SECRET } from '../config/auth.config';
 import { KeyIds } from '../types/common.types';
 
 interface IVerifiedUser {
