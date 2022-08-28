@@ -1,4 +1,4 @@
-export { default as Prisma, prisma } from './prisma.library';
+export * from './prisma.library';
 
 export * from './bcrypt.library';
 

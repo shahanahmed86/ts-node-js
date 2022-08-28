@@ -1,4 +1,6 @@
-import { compareSync, encodePayload, Prisma, prisma } from '../../library';
+import { Prisma } from '@prisma/client';
+import { compareSync, encodePayload, prisma } from '../../library';
+import { _SignUp } from '../../types/extends.types';
 import { Controller } from '../../types/wrapper.types';
 import { NotAuthenticated } from '../../utils/errors.utils';
 import { includeDeleteParams, joiValidator, omitProps } from '../../utils/logics.utils';
@@ -11,12 +13,12 @@ type Args = {
 
 type Result = {
 	token: string;
-	payload: Prisma.UserWhereInput;
+	payload: Partial<_SignUp>;
 };
 
 const notAuthenticated = 'username or password is incorrect';
 
-export const login: Controller<null, Args, Result> = async (root, args) => {
+export const userLogin: Controller<null, Args, Result> = async (root, args) => {
 	await joiValidator(userLoginSchema, args);
 
 	const { username, password } = args;
@@ -37,10 +39,6 @@ export const login: Controller<null, Args, Result> = async (root, args) => {
 	}
 
 	const token = encodePayload(signUp.userId, 'userId');
-	const payload: Prisma.SignUpWhereInput = omitProps(signUp);
-	payload.user = omitProps(signUp.user);
 
-	const result: Result = { token, payload };
-
-	return result;
+	return { token, payload: omitProps(signUp) };
 };

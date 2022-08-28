@@ -3,7 +3,6 @@ import { defaultFieldResolver, GraphQLSchema } from 'graphql';
 import { authController } from '../../controllers/middleware/auth.controller';
 import { UserTypes } from '../../types/common.types';
 import { ContextObject } from '../../types/wrapper.types';
-import { graphqlCatch } from '../../utils/errors.utils';
 import { getUserType } from '../../utils/logics.utils';
 
 function AuthDirective(schema: GraphQLSchema, directiveName: string) {
@@ -15,16 +14,14 @@ function AuthDirective(schema: GraphQLSchema, directiveName: string) {
 			const { resolve = defaultFieldResolver } = field;
 
 			field.resolve = async (...args) => {
-				try {
-					const key = getUserType(directive as UserTypes);
-					const context: ContextObject = args[2];
-					await authController(key, context.req);
-				} catch (e) {
-					graphqlCatch(e);
-				}
+				const key = getUserType(directive as UserTypes);
+				const context: ContextObject = args[2];
+
+				await authController(key, context.req);
 
 				return resolve.apply(this, args);
 			};
+
 			return field;
 		},
 	});

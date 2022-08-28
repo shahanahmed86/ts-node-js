@@ -10,6 +10,7 @@ type Payload = {
 		[key: string]: any;
 	};
 };
+
 export const callGraphqlApi = (payload: Payload) => {
 	return chai
 		.request(httpServer)

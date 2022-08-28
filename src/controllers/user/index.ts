@@ -1,7 +1,7 @@
-export * from './login.controller';
+export * from './userLogin.controller';
 
-export * from './signup.controller';
+export * from './userSignUp.controller';
 
-export * from './loggedIn.controller';
+export * from './userLoggedIn.controller';
 
-export * from './changePassword.controller';
+export * from './userChangePassword.controller';

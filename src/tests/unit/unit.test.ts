@@ -21,7 +21,7 @@ describe('Unit testing on logics.utils.ts file', (): void => {
 	});
 
 	it('convertUnknownIntoError', (): void => {
-		let error: any;
+		let error: unknown;
 
 		error = 'string';
 		let result = convertUnknownIntoError(error);

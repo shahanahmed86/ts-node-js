@@ -1,5 +1,5 @@
-import { encodePayload, hashSync, Prisma, prisma } from '../../library';
-import { GenderType } from '../../types/common.types';
+import { Prisma } from '@prisma/client';
+import { encodePayload, hashSync, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { ConflictError } from '../../utils/errors.utils';
 import {
@@ -10,23 +10,19 @@ import {
 } from '../../utils/logics.utils';
 import { userSignUpSchema } from '../../validation';
 import file from '../../library/file.library';
+import { _SignUp } from '../../types/extends.types';
 
-type Args = {
+interface Args extends _SignUp {
 	username: string;
 	password: string;
-	avatar?: string;
-	fullName?: string;
-	email?: string;
-	cell?: string;
-	gender?: GenderType;
-};
+}
 
 type Result = {
 	token: string;
-	payload: Prisma.SignUpWhereInput;
+	payload: Partial<_SignUp>;
 };
 
-export const register: Controller<null, Args, Result> = async (root, args) => {
+export const userSignUp: Controller<null, Args, Result> = async (root, args) => {
 	await joiValidator(userSignUpSchema, args);
 
 	const where: Prisma.SignUpWhereInput = includeDeleteParams({
@@ -60,10 +56,5 @@ export const register: Controller<null, Args, Result> = async (root, args) => {
 
 	const token = encodePayload(signUp.userId, 'userId');
 
-	const payload: Prisma.SignUpWhereInput = omitProps(signUp);
-	payload.user = omitProps(signUp.user);
-
-	const result: Result = { token, payload };
-
-	return result;
+	return { token, payload: omitProps(signUp) };
 };

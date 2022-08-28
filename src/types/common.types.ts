@@ -1,6 +1,4 @@
-export type LoginType = 'LOCAL' | 'FACEBOOK' | 'GOOGLE';
-
-export type GenderType = 'MALE' | 'FEMALE' | 'PREFER_NOT_TO_SAY';
+export { Gender as GenderType, LoginType } from '@prisma/client';
 
 export type KeyIds = 'userId' | 'adminId';
 

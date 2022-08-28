@@ -16,7 +16,7 @@ export const signup = async (
 ) => {
 	return chai
 		.request(httpServer)
-		.post('/api/user/auth/register')
+		.post('/api/user/auth/signup')
 		.set('content-type', 'application/json')
 		.send({ username, password, avatar, fullName, email, cell, gender });
 };

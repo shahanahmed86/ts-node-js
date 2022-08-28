@@ -1,4 +1,5 @@
-import { compareSync, encodePayload, Prisma, prisma } from '../../library';
+import { Admin } from '@prisma/client';
+import { compareSync, encodePayload, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { NotAuthenticated } from '../../utils/errors.utils';
 import { joiValidator, omitProps } from '../../utils/logics.utils';
@@ -11,12 +12,12 @@ type Args = {
 
 type Result = {
 	token: string;
-	payload: Prisma.AdminWhereInput;
+	payload: Partial<Admin>;
 };
 
 const notAuthenticated: string = 'username or password is incorrect';
 
-export const login: Controller<null, Args, Result> = async (root, args) => {
+export const adminLogin: Controller<null, Args, Result> = async (root, args) => {
 	await joiValidator(adminLoginSchema, args);
 
 	const { username, password } = args;
@@ -28,9 +29,6 @@ export const login: Controller<null, Args, Result> = async (root, args) => {
 	if (!isMatch) throw new NotAuthenticated(notAuthenticated);
 
 	const token = encodePayload(admin.id, 'adminId');
-	const payload = omitProps(admin);
 
-	const result: Result = { token, payload };
-
-	return result;
+	return { token, payload: omitProps(admin) };
 };

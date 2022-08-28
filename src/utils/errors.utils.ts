@@ -5,6 +5,7 @@ import {
 	UserInputError,
 } from 'apollo-server-core';
 import { Response } from 'express';
+import { GraphQLError } from 'graphql';
 import { IRequest } from '../types/extends.types';
 import { convertUnknownIntoError } from './logics.utils';
 
@@ -47,21 +48,21 @@ export class NotAuthenticated extends HttpError {
 	}
 }
 
-export const graphqlCatch = (e: unknown): void => {
+export const graphqlCatch = (e: unknown): GraphQLError => {
 	const error = convertUnknownIntoError(e);
 	switch (error.status) {
 		case 401: {
-			throw new AuthenticationError(error.message);
+			return new AuthenticationError(error.message);
 		}
 		case 422:
 		case 400: {
-			throw new ForbiddenError(error.message);
+			return new ForbiddenError(error.message);
 		}
 		case 409: {
-			throw new UserInputError(error.message);
+			return new UserInputError(error.message);
 		}
 		default: {
-			throw new ApolloError(error.message);
+			return new ApolloError(error.message);
 		}
 	}
 };

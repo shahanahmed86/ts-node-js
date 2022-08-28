@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
-import express, { Application } from 'express';
+import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
 
@@ -10,7 +9,7 @@ import routes from './routes';
 import { logger } from '../library';
 
 // initiate express app;
-const app: Application = express();
+const app = express();
 
 // parser
 app.use(express.urlencoded({ extended: true }));
@@ -31,10 +30,6 @@ app.disable('x-powered-by');
 // routings
 app.use('/api', routes);
 
-app.get('/api/healthcheck', (req, res) => {
-	res.status(200).send(`I am happy and healthy, from host ${os.hostname()}!\n`);
-});
-
 // serving builds
 const buildsStatic = path.resolve('./builds');
 if (!fs.existsSync(buildsStatic)) fs.mkdirSync(buildsStatic);
@@ -42,16 +37,17 @@ if (!fs.existsSync(buildsStatic)) fs.mkdirSync(buildsStatic);
 app.use(express.static(buildsStatic));
 
 const builds = fs.readdirSync(buildsStatic);
-builds.forEach((file) => {
-	const isDirectory = fs.statSync(path.join(buildsStatic, file)).isDirectory();
-	if (isDirectory) {
-		app.get(`/${file}/*`, (req, res) => {
-			res.sendFile(path.resolve(buildsStatic, file, 'index.html'));
-		});
-	}
-});
 
-// middleware(s) for error handling
+for (const build of builds) {
+	const isDirectory = fs.statSync(path.join(buildsStatic, build)).isDirectory();
+	if (!isDirectory) continue;
+
+	app.get(`/${build}/*`, (_req, res) => {
+		res.sendFile(path.resolve(buildsStatic, build, 'index.html'));
+	});
+}
+
+// middleware(s) for no routes
 app.use(notFound);
 
 export default app;

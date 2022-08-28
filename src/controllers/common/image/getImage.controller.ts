@@ -7,10 +7,10 @@ type Args = {
 	filename: string;
 };
 
-export const getImage: Controller<null, Args, Buffer> = async (root, args) => {
+export const getImage: Controller<null, Args, string> = async (root, args) => {
 	await joiValidator(fileRef, args);
 
-	return file.getFileBuffer(args.filename);
+	return file.getFilePath(args.filename);
 };
 
 export default getImage;

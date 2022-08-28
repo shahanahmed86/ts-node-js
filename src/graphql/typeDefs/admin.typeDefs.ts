@@ -4,8 +4,8 @@ const adminSchema = gql`
   type Admin {
     id: String!
     username: String!
-    deletedUsers: [User!]
-    signUps: [SignUp!]
+    deletedUsers: [User!]!
+    signUps: [SignUp!]!
     createdAt: Date!
     updatedAt: Date!
   }

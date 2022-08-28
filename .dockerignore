@@ -6,3 +6,5 @@ Dockerfile
 docker-compose
 .env*
 Makefile
+builds
+uploads

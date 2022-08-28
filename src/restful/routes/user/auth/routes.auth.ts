@@ -7,10 +7,10 @@ const router = Router();
 
 router
 	.route('/')
-	.get(auth('userId'), restWrapper(userController.loggedIn))
-	.put(auth('userId'), restWrapper(userController.changePassword))
-	.post(guest, restWrapper(userController.login));
+	.get(auth('userId'), restWrapper(userController.userLoggedIn))
+	.put(auth('userId'), restWrapper(userController.userChangePassword))
+	.post(guest, restWrapper(userController.userLogin));
 
-router.post('/register', guest, restWrapper(userController.register));
+router.post('/signup', guest, restWrapper(userController.userSignUp));
 
 export default router;

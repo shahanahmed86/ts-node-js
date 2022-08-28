@@ -1,4 +1,5 @@
-import { compareSync, hashSync, Prisma, prisma } from '../../library';
+import { Prisma } from '@prisma/client';
+import { compareSync, hashSync, prisma } from '../../library';
 import { LoginType } from '../../types/common.types';
 import { Controller } from '../../types/wrapper.types';
 import { ConflictError, NotAuthorized } from '../../utils/errors.utils';
@@ -10,7 +11,7 @@ type Args = {
 	password: string;
 };
 
-export const changePassword: Controller<null, Args, string> = async (root, args, { req }) => {
+export const userChangePassword: Controller<null, Args, string> = async (root, args, { req }) => {
 	if (!req.userId) throw new NotAuthorized();
 
 	await joiValidator(changePasswordSchema, args);

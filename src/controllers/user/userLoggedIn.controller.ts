@@ -1,11 +1,13 @@
-import { Prisma, prisma } from '../../library';
+import { Prisma } from '@prisma/client';
+import { prisma } from '../../library';
+import { _SignUp } from '../../types/extends.types';
 import { Controller } from '../../types/wrapper.types';
 import { ConflictError, NotAuthorized } from '../../utils/errors.utils';
 import { includeDeleteParams, omitProps } from '../../utils/logics.utils';
 
-type Result = Prisma.SignUpWhereInput;
+type Result = Partial<_SignUp>;
 
-export const loggedIn: Controller<null, object, Result> = async (root, args, { req }) => {
+export const userLoggedIn: Controller<null, object, Result> = async (root, args, { req }) => {
 	if (!req.userId) throw new NotAuthorized();
 
 	const userWhereInput: Prisma.UserWhereInput = { id: req.userId };
@@ -24,8 +26,5 @@ export const loggedIn: Controller<null, object, Result> = async (root, args, { r
 		throw new ConflictError(`You can login with ${user.defaultLogin.toLowerCase()} credentials`);
 	}
 
-	const payload: Result = omitProps(signUp);
-	payload.user = omitProps(signUp.user);
-
-	return payload;
+	return omitProps(signUp);
 };

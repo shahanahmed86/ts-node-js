@@ -1,8 +1,7 @@
 import { commonController } from '../../../controllers';
-import { graphqlWrapper } from '../../../utils/wrapper.utils';
 
 const common = {
-	genderOptions: graphqlWrapper(commonController.getGenderOptions),
+	genderOptions: commonController.genderOptions,
 };
 
 export default common;
