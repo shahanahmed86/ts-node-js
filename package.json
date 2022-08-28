@@ -26,7 +26,7 @@
 		"lint": "eslint '**/*.ts'",
 		"test": "make run-test-up",
 		"posttest": "make run-test-down",
-		"preexec-tests": "npm run db:deploy && npm run db:seed",
+		"preexec-tests": "npm run db:generate && npm run db:deploy && npm run db:seed",
 		"exec-tests": "mocha -r ts-node/register 'src/tests/**/*.test.ts' --exit"
 	},
 	"lint-staged": {
