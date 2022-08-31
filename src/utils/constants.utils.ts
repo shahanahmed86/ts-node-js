@@ -21,3 +21,4 @@ export const LOGIN_TYPES: string[] = ['LOCAL', 'FACEBOOK', 'GOOGLE'];
 export const EXPIRES_IN_MILLISECONDS: number = JWT_EXPIRES;
 
 export const EXPIRES_IN_SECONDS: number = EXPIRES_IN_MILLISECONDS / 1000;
+
