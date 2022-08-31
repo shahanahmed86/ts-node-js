@@ -45,6 +45,12 @@ const questions = [
 		default: 'pussy-cat',
 	},
 	{
+		type: 'number',
+		name: 'JWT_EXPIRES',
+		message: 'Please enter the milliseconds to expire the JWT token',
+		default: '3600000',
+	},
+	{
 		type: 'input',
 		name: 'DB_HOST',
 		message: 'Please enter the host of database',
