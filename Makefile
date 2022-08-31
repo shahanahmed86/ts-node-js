@@ -15,7 +15,7 @@ run-dev-up:
 run-dev-up-rebuild:
 	docker-compose -p ts-app \
 	-f docker-compose/docker-compose.yml -f docker-compose/docker-compose.dev.yml \
-	up -d --build
+	up -d --build --renew-anon-volumes
 run-dev-down:
 	docker-compose -p ts-app \
 	-f docker-compose/docker-compose.yml -f docker-compose/docker-compose.dev.yml \

@@ -1,7 +1,7 @@
-import Mutation from './mutation';
-import Query from './query';
-import Relations from './relations';
+import Query from './queries';
+import Mutation from './mutations';
+import Subscription from './subscriptions';
 
-const resolvers = Object.assign({ Query, Mutation }, Relations);
+const resolvers = Object.assign({ Query, Mutation, Subscription });
 
 export default resolvers;

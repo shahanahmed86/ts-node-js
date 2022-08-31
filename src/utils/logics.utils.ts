@@ -2,14 +2,19 @@ import { v4 as uuidV4 } from 'uuid';
 import _ from 'lodash';
 import { ObjectSchema } from 'joi';
 import { BadRequest, ConflictError, HttpError } from './errors.utils';
-import { SHOULD_OMIT_PROPS } from './constants.utils';
+import { EXPIRES_IN_MILLISECONDS, SHOULD_OMIT_PROPS } from './constants.utils';
 import { GetUserType } from '../types/common.types';
 
 type GetMillSeconds = (value?: number) => number;
-export const getMillSeconds: GetMillSeconds = (value = Date.now()) => new Date(value).getTime();
+export const getMilliSeconds: GetMillSeconds = (value = Date.now()) => new Date(value).getTime();
 
 type GetZeroTimeZone = (value?: Date) => string;
 export const getZeroTimeZone: GetZeroTimeZone = (value = new Date()) => value.toISOString();
+
+type GetSessionEndsAt = (value?: number) => string;
+export const getSessionEndsAt: GetSessionEndsAt = (value = EXPIRES_IN_MILLISECONDS) => {
+	return new Date(Date.now() + value).toISOString();
+};
 
 export const convertUnknownIntoError = (err: unknown | any): HttpError => {
 	let error: HttpError;

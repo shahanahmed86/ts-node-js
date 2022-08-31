@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 import {
 	convertUnknownIntoError,
-	getMillSeconds,
+	getMilliSeconds,
+	getSessionEndsAt,
 	getZeroTimeZone,
 	includeDeleteParams,
 } from '../../utils/logics.utils';
@@ -10,13 +11,18 @@ import { changePasswordSchema } from '../../validation/index';
 import { resolverHelper } from '../helper';
 
 describe('Unit testing on logics.utils.ts file', (): void => {
-	it('getMillSeconds', (): void => {
-		const result = getMillSeconds();
+	it('getMilliSeconds', (): void => {
+		const result = getMilliSeconds();
 		expect(result).to.be.a('number');
 	});
 
 	it('getZeroTimeZone', (): void => {
 		const result = getZeroTimeZone();
+		expect(result).to.be.a.string;
+	});
+
+	it('getSessionEndsAt', (): void => {
+		const result = getSessionEndsAt();
 		expect(result).to.be.a.string;
 	});
 

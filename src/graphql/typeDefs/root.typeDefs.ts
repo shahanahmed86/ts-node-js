@@ -29,6 +29,12 @@ const rootSchema = gql`
 	type Subscription {
 		_: Boolean
 	}
+
+	type Message {
+		success: Boolean!
+		message: String!
+		debugMessage: String
+	}
 `;
 
 export default rootSchema;
