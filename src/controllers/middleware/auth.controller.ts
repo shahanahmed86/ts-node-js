@@ -17,14 +17,20 @@ const validateToken: ValidateToken = async (req, _token, key) => {
 
 	const [, token] = _token.split(' ');
 
+	const isTokenValid = await prisma.session.findFirst({
+		where: { token, isPublished: false },
+	});
+	if (!isTokenValid) throw new NotAuthenticated(invalidSession);
+
 	const payload = await decodePayload(token);
 	if (!payload || !(key in payload) || !('exp' in payload)) {
 		throw new NotAuthenticated(invalidSession);
 	}
 
-	req[key] = payload[key];
+	const value: string = payload[key] as string;
+	req[key] = value;
 
-	return payload[key] as string;
+	return value;
 };
 
 export const guestController = (req: IRequest) => {

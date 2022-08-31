@@ -3,6 +3,7 @@ import { encodePayload, hashSync, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { ConflictError } from '../../utils/errors.utils';
 import {
+	getSessionEndsAt,
 	getZeroTimeZone,
 	includeDeleteParams,
 	joiValidator,
@@ -55,6 +56,25 @@ export const userSignUp: Controller<null, Args, Result> = async (root, args) => 
 	const signUp = await prisma.signUp.create({ data, include: { user: true } });
 
 	const token = encodePayload(signUp.userId, 'userId');
+
+	const endsAt = getSessionEndsAt();
+
+	await prisma.session.upsert({
+		where: { userId: signUp.user.id },
+		update: {
+			token,
+			endsAt,
+			updatedAt: now,
+			isPublished: false,
+		},
+		create: {
+			token,
+			userId: signUp.user.id,
+			endsAt,
+			createdAt: now,
+			updatedAt: now,
+		},
+	});
 
 	return { token, payload: omitProps(signUp) };
 };

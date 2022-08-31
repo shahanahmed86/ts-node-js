@@ -15,3 +15,7 @@ export const MORGAN_TOKENS: string = [
 export const GENDER_OPTIONS: string[] = ['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'];
 
 export const LOGIN_TYPES: string[] = ['LOCAL', 'FACEBOOK', 'GOOGLE'];
+
+export const EXPIRES_IN_MILLISECONDS: number = 1000 * 60; // one minute
+
+export const EXPIRES_IN_SECONDS: number = EXPIRES_IN_MILLISECONDS / 1000; // one minute

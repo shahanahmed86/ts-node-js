@@ -3,7 +3,13 @@ import { compareSync, encodePayload, prisma } from '../../library';
 import { _SignUp } from '../../types/extends.types';
 import { Controller } from '../../types/wrapper.types';
 import { NotAuthenticated } from '../../utils/errors.utils';
-import { includeDeleteParams, joiValidator, omitProps } from '../../utils/logics.utils';
+import {
+	getZeroTimeZone,
+	includeDeleteParams,
+	joiValidator,
+	omitProps,
+	getSessionEndsAt,
+} from '../../utils/logics.utils';
 import { userLoginSchema } from '../../validation';
 
 type Args = {
@@ -39,6 +45,26 @@ export const userLogin: Controller<null, Args, Result> = async (root, args) => {
 	}
 
 	const token = encodePayload(signUp.userId, 'userId');
+
+	const now = getZeroTimeZone();
+	const endsAt = getSessionEndsAt();
+
+	await prisma.session.upsert({
+		where: { userId: signUp.user.id },
+		update: {
+			token,
+			endsAt,
+			updatedAt: now,
+			isPublished: false,
+		},
+		create: {
+			token,
+			userId: signUp.user.id,
+			endsAt,
+			createdAt: now,
+			updatedAt: now,
+		},
+	});
 
 	return { token, payload: omitProps(signUp) };
 };

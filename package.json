@@ -69,6 +69,8 @@
 		"@types/mocha": "^9.1.1",
 		"@types/morgan": "^1.9.3",
 		"@types/node": "^18.6.3",
+		"@types/node-cron": "^3.0.2",
+		"@types/ws": "^8.5.3",
 		"@typescript-eslint/eslint-plugin": "^5.31.0",
 		"@typescript-eslint/parser": "^5.31.0",
 		"chai": "^4.3.6",
@@ -86,7 +88,7 @@
 		"@graphql-tools/utils": "^8.9.0",
 		"@prisma/client": "4.1.1",
 		"@types/uuid": "^8.3.4",
-		"apollo-server-core": "^3.10.0",
+		"apollo-server-core": "^3.10.2",
 		"apollo-server-express": "^3.10.0",
 		"bcryptjs": "^2.4.3",
 		"cors": "^2.8.5",
@@ -95,13 +97,17 @@
 		"express": "^4.18.1",
 		"express-fileupload": "^1.4.0",
 		"graphql": "^16.5.0",
+		"graphql-subscriptions": "^2.0.0",
+		"graphql-ws": "^5.10.1",
 		"husky": "^8.0.1",
 		"inquirer": "^8.2.0",
 		"joi": "^17.6.0",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.21",
 		"morgan": "^1.10.0",
+		"node-cron": "^3.0.2",
 		"prisma": "^4.1.1",
-		"uuid": "^8.3.2"
+		"uuid": "^8.3.2",
+		"ws": "^8.8.1"
 	}
 }
