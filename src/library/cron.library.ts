@@ -1,8 +1,9 @@
 import cron from 'node-cron';
+import { CHECK_SESSIONS_IN } from '../config/auth.config';
 import { prisma } from './prisma.library';
 import pubsub, { SESSION_EXPIRED } from './pubsub.library';
 
-export const sessionTask = cron.schedule('*/10 * * * * *', validateAdminSession);
+export const sessionTask = cron.schedule(CHECK_SESSIONS_IN, validateAdminSession);
 
 async function validateAdminSession(now: Date) {
 	const sessions = await prisma.session.findMany({

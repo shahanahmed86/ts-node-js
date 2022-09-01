@@ -22,6 +22,7 @@ services:
       - DB_NAME
       - DB_PORT
       - DATABASE_URL
+      - CHECK_SESSIONS_IN
     environment:
       - APP_PORT_FILE=/run/secrets/APP_PORT
       - APP_PROTOCOL_FILE=/run/secrets/APP_PROTOCOL
@@ -36,6 +37,7 @@ services:
       - DB_NAME_FILE=/run/secrets/DB_NAME
       - DB_PORT_FILE=/run/secrets/DB_PORT
       - DATABASE_URL_FILE=/run/secrets/DATABASE_URL
+      - CHECK_SESSIONS_IN_FILE=/run/secrets/CHECK_SESSIONS_IN
 
   mysqldb:
     networks:
@@ -85,3 +87,5 @@ secrets:
     file: ./secrets/DB_PORT
   DATABASE_URL:
     file: ./secrets/DATABASE_URL
+  CHECK_SESSIONS_IN:
+    file: ./secrets/CHECK_SESSIONS_IN

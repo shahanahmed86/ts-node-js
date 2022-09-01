@@ -80,6 +80,12 @@ const questions = [
 		message: "Please enter the port where Database's host",
 		default: '3306',
 	},
+	{
+		type: 'input',
+		name: 'CHECK_SESSIONS_IN',
+		message: "Please enter the interval to check sessions validity/expiry",
+		default: '*/5 * * * * *',
+	},
 ];
 
 (async () => {
