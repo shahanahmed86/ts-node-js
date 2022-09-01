@@ -18,6 +18,6 @@ export const GENDER_OPTIONS: string[] = ['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'];
 
 export const LOGIN_TYPES: string[] = ['LOCAL', 'FACEBOOK', 'GOOGLE'];
 
-export const EXPIRES_IN_MILLISECONDS: number = JWT_EXPIRES; // one minute
+export const EXPIRES_IN_MILLISECONDS: number = JWT_EXPIRES;
 
-export const EXPIRES_IN_SECONDS: number = EXPIRES_IN_MILLISECONDS / 1000; // one minute
+export const EXPIRES_IN_SECONDS: number = EXPIRES_IN_MILLISECONDS / 1000;
