@@ -10,3 +10,5 @@ export const JWT_EXPIRES = parseInt(PRE_JWT_EXPIRES);
 
 const PRE_BCRYPT_MAX_BYTES = process.env.BCRYPT_MAX_BYTES || '72';
 export const BCRYPT_MAX_BYTES = parseInt(PRE_BCRYPT_MAX_BYTES);
+
+export const CHECK_SESSIONS_IN = process.env.CHECK_SESSIONS_IN || '*/5 * * * * *';

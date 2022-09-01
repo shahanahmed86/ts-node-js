@@ -52,6 +52,7 @@ make run-prod-down # end
 ```
 
 ## server
+
 ```sh
 # execute bash inside of the container
 docker exec -it <container_name> bash
@@ -90,6 +91,7 @@ docker exec -it <container_name> mysql -u<user> -p<password> -h<host> <name>
 ```
 
 ## git
+
 ```sh
 git commit -m "message" --no-verify
 # flags
@@ -97,12 +99,21 @@ git commit -m "message" --no-verify
 ```
 
 ## nginx
+
 ```sh
 # to reload nginx run this command
-docker exec <container> nginx -s reload
+docker exec <container_name> nginx -s reload
+```
+## GraphQL is actually an extended version Restful API
+
+```sh
+curl localhost/graphql -X POST \
+-H 'content-type: application/json' \
+-d '{"query":"mutation Mutation($username: String!, $password: String!) { data: adminLogin(username: $username, password: $password) { token } }","variables":"{\"username\":\"shahan\",\"password\":\"123Abc456\"}"}' | json_pp
 ```
 
 ## Development hacks
+
 ```sh
 # ec2 or any other instance of linux
 echo "Host ssh-app
@@ -118,16 +129,9 @@ ssh ssh-app
 # the script in the Makefile
 
 # make short aliases to run bigger commands
-alias make_server_image="docker build -t <image_name>:<tag> path/to/project-folder && docker push <image_name>:<tag> && docker save -o path/to/image.tar <image_name>:<tag>"
-
-# an alias can also be called in another alias
-alias ssh_deploy_server_prod="make_server_image && scp path/to/image.tar ssh-app:image.tar && ssh ssh-app 'docker load -i image.tar && cd path/to/project && git pull && make run-prod-up'"
-
-# I preferred uploading tar file of the docker image to the 
-# server rather than building a docker build on it because
-# it will be consuming server resources.
+alias ssh_deploy_server_prod="scp path/to/image.tar ssh-app:file.ext && ssh ssh-app 'cd path/to/project && git pull && make run-prod-up'"
 
 # Now only need to know is to run the aliases which you've created.
 ```
-NOTE: in order to avoid prompt on git pull command on ssh_deploy_server_prod alias you need add ssh id_rsa.pub key to your github authorized SSH Keys
-[SSH Keys](https://github.com/settings/keys 'https://github.com/settings/keys')
+
+NOTE: in order to avoid password/token prompt on git pull command you need to add ssh id_rsa.pub key to your github authorized [SSH Keys](https://github.com/settings/keys 'https://github.com/settings/keys')
