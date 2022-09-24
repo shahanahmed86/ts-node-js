@@ -83,7 +83,7 @@ const questions = [
 	{
 		type: 'input',
 		name: 'CHECK_SESSIONS_IN',
-		message: "Please enter the interval to check sessions validity/expiry",
+		message: 'Please enter the interval to check sessions validity/expiry',
 		default: '*/5 * * * * *',
 	},
 ];
@@ -92,15 +92,12 @@ const questions = [
 	try {
 		options = await promptForMissingOptions(options);
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { forceReInstall, skipPrompts, args, project_name, repository_name, image_name, ...env } =
-			options;
+		const { forceReInstall, skipPrompts, args, project_name, repository_name, image_name, ...env } = options;
 
 		if (forceReInstall) {
 			if (fs.existsSync('node_modules')) fs.rmSync('node_modules', { recursive: true });
 			if (fs.existsSync('.husky/_')) fs.rmSync('.husky/_', { recursive: true });
-			if (fs.existsSync('docker-compose/secrets')) {
-				fs.rmSync('docker-compose/secrets', { recursive: true });
-			}
+			if (fs.existsSync('docker-compose/secrets')) fs.rmSync('docker-compose/secrets', { recursive: true });
 			if (fs.existsSync('.env')) fs.rmSync('.env');
 		}
 
@@ -125,9 +122,7 @@ const questions = [
 		allVars = getJSON('.env');
 		if (!fs.existsSync('docker-compose/secrets')) fs.mkdirSync('docker-compose/secrets');
 		Object.keys(allVars).forEach((k) => {
-			if (!fs.existsSync(`docker-compose/secrets/${k}`)) {
-				fs.appendFileSync(`docker-compose/secrets/${k}`, allVars[k]);
-			}
+			if (!fs.existsSync(`docker-compose/secrets/${k}`)) fs.appendFileSync(`docker-compose/secrets/${k}`, allVars[k]);
 		});
 
 		coloredLogs('Setup Finished', undefined, true);
@@ -160,17 +155,12 @@ function coloredLogs(message, failed = false, shouldExit = false) {
 
 function promptForMissingOptions(opts) {
 	if (opts.skipPrompts) {
-		return questions.reduce(
-			(acc, cur) => Object.assign(opts, acc, { [cur.name]: cur.default }),
-			{},
-		);
+		return questions.reduce((acc, cur) => Object.assign(opts, acc, { [cur.name]: cur.default }), {});
 	}
 
 	return inquirer
 		.prompt(questions)
-		.then((ans) =>
-			questions.reduce((acc, cur) => Object.assign(opts, acc, { [cur.name]: ans[cur.name] }), {}),
-		);
+		.then((ans) => questions.reduce((acc, cur) => Object.assign(opts, acc, { [cur.name]: ans[cur.name] }), {}));
 }
 
 function getJSON(filePath, separate = '=') {

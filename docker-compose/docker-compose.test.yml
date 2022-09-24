@@ -14,12 +14,10 @@ services:
 
   mysqldb:
     tty: true
-    build:
-      context: ../
-      target: mysql
     restart: 'no'
     volumes:
       - mysql_test:/var/lib/mysql
+      - ../healthchecks/mysql-healthcheck.sh:/usr/local/bin/healthcheck.sh
 
 volumes:
   mysql_test:

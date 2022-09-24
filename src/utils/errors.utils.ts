@@ -1,9 +1,4 @@
-import {
-	ApolloError,
-	AuthenticationError,
-	ForbiddenError,
-	UserInputError,
-} from 'apollo-server-core';
+import { ApolloError, AuthenticationError, ForbiddenError, UserInputError } from 'apollo-server-core';
 import { Response } from 'express';
 import { GraphQLError } from 'graphql';
 import { IRequest } from '../types/extends.types';

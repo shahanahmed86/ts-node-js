@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
@@ -29,23 +27,6 @@ app.disable('x-powered-by');
 
 // routings
 app.use('/api', routes);
-
-// serving builds
-const buildsStatic = path.resolve('./builds');
-if (!fs.existsSync(buildsStatic)) fs.mkdirSync(buildsStatic);
-
-app.use(express.static(buildsStatic));
-
-const builds = fs.readdirSync(buildsStatic);
-
-for (const build of builds) {
-	const isDirectory = fs.statSync(path.join(buildsStatic, build)).isDirectory();
-	if (!isDirectory) continue;
-
-	app.get(`/${build}/*`, (_req, res) => {
-		res.sendFile(path.resolve(buildsStatic, build, 'index.html'));
-	});
-}
 
 // middleware(s) for no routes
 app.use(notFound);

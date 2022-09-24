@@ -1,13 +1,20 @@
 version: '3.7'
 
 services:
+  web:
+    image: nginx:1.23
+    depends_on:
+      - server
+    networks:
+      - app
+    ports:
+      - 80:80
+
   server:
     depends_on:
       - mysqldb
     networks:
       - app
-    volumes:
-      - ../builds:/app/builds
     secrets:
       - APP_PORT
       - APP_PROTOCOL
@@ -40,14 +47,16 @@ services:
       - CHECK_SESSIONS_IN_FILE=/run/secrets/CHECK_SESSIONS_IN
 
   mysqldb:
+    image: mysql:8-oracle
     networks:
       - app
     command: --authentication_policy=mysql_native_password
     healthcheck:
-      test: /healthcheck.sh
+      test: [ "CMD", "/usr/local/bin/healthcheck.sh" ]
       interval: 11s
       timeout: 5s
       retries: 5
+      start_period: 60s
     cap_add:
       - SYS_NICE # CAP_SYS_NICE
     secrets:
@@ -63,29 +72,43 @@ services:
 secrets:
   APP_PORT:
     file: ./secrets/APP_PORT
+    name: APP_PORT_20220924T035300
   APP_PROTOCOL:
     file: ./secrets/APP_PROTOCOL
+    name: APP_PROTOCOL_20220924T035300
   APP_HOST:
     file: ./secrets/APP_HOST
+    name: APP_HOST_20220924T035300
   BCRYPT_SALT:
     file: ./secrets/BCRYPT_SALT
+    name: BCRYPT_SALT_20220924T035300
   BCRYPT_MAX_BYTES:
     file: ./secrets/BCRYPT_MAX_BYTES
+    name: BCRYPT_MAX_BYTES_20220924T035300
   JWT_SECRET:
     file: ./secrets/JWT_SECRET
+    name: JWT_SECRET_20220924T035300
   JWT_EXPIRES:
     file: ./secrets/JWT_EXPIRES
+    name: JWT_EXPIRES_20220924T035300
   DB_HOST:
     file: ./secrets/DB_HOST
+    name: DB_HOST_20220924T035300
   DB_USER:
     file: ./secrets/DB_USER
+    name: DB_USER_20220924T035300
   DB_PASS:
     file: ./secrets/DB_PASS
+    name: DB_PASS_20220924T035300
   DB_NAME:
     file: ./secrets/DB_NAME
+    name: DB_NAME_20220924T035300
   DB_PORT:
     file: ./secrets/DB_PORT
+    name: DB_PORT_20220924T035300
   DATABASE_URL:
     file: ./secrets/DATABASE_URL
+    name: DATABASE_URL_20220924T035300
   CHECK_SESSIONS_IN:
     file: ./secrets/CHECK_SESSIONS_IN
+    name: CHECK_SESSIONS_IN_20220924T035300

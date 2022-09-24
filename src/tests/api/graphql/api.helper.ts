@@ -12,9 +12,5 @@ type Payload = {
 };
 
 export const callGraphqlApi = (payload: Payload) => {
-	return chai
-		.request(httpServer)
-		.post('/graphql')
-		.set('content-type', 'application/json')
-		.send(payload);
+	return chai.request(httpServer).post('/graphql').set('content-type', 'application/json').send(payload);
 };

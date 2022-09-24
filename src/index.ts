@@ -1,8 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
-import {
-	ApolloServerPluginDrainHttpServer,
-	ApolloServerPluginLandingPageLocalDefault,
-} from 'apollo-server-core';
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { createServer } from 'http';
 import app from './restful';
 import { APP_PORT } from './config/app.config';

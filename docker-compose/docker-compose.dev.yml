@@ -2,17 +2,11 @@ version: '3.7'
 
 services:
   web:
-    restart: on-failure
+    tty: true
     depends_on:
       server:
         condition: service_healthy
-    networks:
-      - app
-    build:
-      context: ../
-      target: web
-    ports:
-      - 80:80
+    restart: on-failure
     volumes:
       - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../nginx/default.html:/usr/share/nginx/html/index.html
@@ -34,11 +28,9 @@ services:
   mysqldb:
     tty: true
     restart: on-failure
-    build:
-      context: ../
-      target: mysql
     volumes:
       - mysql_dev:/var/lib/mysql
+      - ../healthchecks/mysql-healthcheck.sh:/usr/local/bin/healthcheck.sh
     ports:
       - '3306:3306'
 
