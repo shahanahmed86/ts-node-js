@@ -2,12 +2,7 @@ import { Admin } from '@prisma/client';
 import { compareSync, encodePayload, prisma } from '../../library';
 import { Controller } from '../../types/wrapper.types';
 import { NotAuthenticated } from '../../utils/errors.utils';
-import {
-	getSessionEndsAt,
-	getZeroTimeZone,
-	joiValidator,
-	omitProps,
-} from '../../utils/logics.utils';
+import { getSessionEndsAt, getZeroTimeZone, joiValidator, omitProps } from '../../utils/logics.utils';
 import { adminLoginSchema } from '../../validation';
 
 type Args = {

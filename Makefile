@@ -1,12 +1,6 @@
-create-web-image:
-	docker build -t 127.0.0.1:5000/ts-app-web --target web . && \
-	docker push 127.0.0.1:5000/ts-app-web
-create-mysql-image:
-	docker build -t 127.0.0.1:5000/ts-app-mysql --target mysql . && \
-	docker push 127.0.0.1:5000/ts-app-mysql
 create-server-image:
-	docker build -t 127.0.0.1:5000/ts-app-server . && \
-	docker push 127.0.0.1:5000/ts-app-server
+	docker build -t shahandocker1986/ts-app-server:0.0.1 . && \
+	docker push shahandocker1986/ts-app-server:0.0.1
 
 run-dev-up:
 	docker-compose -p ts-app \

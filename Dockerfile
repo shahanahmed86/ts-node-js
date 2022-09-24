@@ -31,18 +31,6 @@ FROM base as source
 COPY --chown=node:node . .
 COPY --from=dev /app/dist ./dist
 
-### nginx
-FROM nginx:1.23 as web
-
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY ./nginx/default.html /usr/share/nginx/html/index.html
-
-### mysql
-FROM mysql:8-oracle as mysql
-
-# COPY ./dump.sql /docker-entrypoint-initdb.d/dump.sql
-COPY ./healthchecks/mysql-healthcheck.sh /healthcheck.sh
-
 ### production stage
 FROM source as prod
 CMD [ "node", "index.js" ]

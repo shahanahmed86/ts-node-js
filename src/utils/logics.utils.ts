@@ -34,10 +34,7 @@ export function includeDeleteParams<T>(where: T): T {
 	return Object.assign(where, { isDeleted: false, deletedAt: null });
 }
 
-export const joiValidator = async (
-	schema: ObjectSchema,
-	payload: { [key: string]: any },
-): Promise<any> => {
+export const joiValidator = async (schema: ObjectSchema, payload: { [key: string]: any }): Promise<any> => {
 	try {
 		await schema.validateAsync(payload, { abortEarly: false });
 	} catch (e) {
@@ -47,9 +44,7 @@ export const joiValidator = async (
 };
 
 export const omitProps = (obj: { [key: string]: any }, props: string[] = SHOULD_OMIT_PROPS) => {
-	const objectKey = Object.keys(obj).find(
-		(key) => obj[key] && typeof key === 'object' && !(obj[key] instanceof Date),
-	);
+	const objectKey = Object.keys(obj).find((key) => obj[key] && typeof key === 'object' && !(obj[key] instanceof Date));
 	if (objectKey) return _.omit(obj[objectKey], props);
 	return _.omit(obj, props);
 };

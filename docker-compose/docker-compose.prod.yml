@@ -2,6 +2,11 @@ version: '3.7'
 
 services:
   web:
+    configs:
+      - source: NGINX_CONFIG
+        target: /etc/nginx/conf.d/default.conf
+      - source: NGINX_HTML
+        target: /usr/share/nginx/html/index.html
     deploy:
       mode: global
       update_config:
@@ -17,20 +22,10 @@ services:
         delay: 10s
         max_attempts: 10
         window: 120s
-    depends_on:
-      - server
-    networks:
-      - app
-    image: 127.0.0.1:5000/ts-app-web
-    ports:
-      - 80:80
 
   server:
-    image: 127.0.0.1:5000/ts-app-server
+    image: shahandocker1986/ts-app-server:0.0.1
     command: npm run start
-    volumes:
-      - ../uploads:/app/uploads:rw
-      - ../logs:/app/logs:rw
     deploy:
       replicas: 3
       update_config:
@@ -48,7 +43,10 @@ services:
         window: 120s
 
   mysqldb:
-    image: 127.0.0.1:5000/ts-app-mysql
+    configs:
+      - source: MYSQL_HEALTHECHECK
+        target: /usr/local/bin/healthcheck.sh
+        mode: 555
     deploy:
       update_config:
         parallelism: 1
@@ -63,6 +61,9 @@ services:
         delay: 10s
         max_attempts: 10
         window: 120s
+      placement:
+        constraints:
+          - node.role == manager
     volumes:
       - mysql_prod:/var/lib/mysql
 
@@ -73,3 +74,14 @@ volumes:
 networks:
   app:
     driver: overlay
+
+configs:
+  MYSQL_HEALTHECHECK:
+    file: ../healthchecks/mysql-healthcheck.sh
+    name: MYSQL_HEALTHECHECK_20220924T035300
+  NGINX_CONFIG:
+    file: ../nginx/default.conf
+    name: NGINX_CONFIG_20220924T035300
+  NGINX_HTML:
+    file: ../nginx/default.html
+    name: NGINX_HTML_20220924T035300

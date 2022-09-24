@@ -15,8 +15,4 @@ export type Controller<R, A, C> = (
 	info?: GraphQLResolveInfo,
 ) => C | Promise<C>;
 
-export type ContextFunction = (
-	req: IRequest,
-	res: Response,
-	next: NextFunction,
-) => void | Promise<void>;
+export type ContextFunction = (req: IRequest, res: Response, next: NextFunction) => void | Promise<void>;
