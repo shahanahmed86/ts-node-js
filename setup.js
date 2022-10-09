@@ -122,7 +122,9 @@ const questions = [
 		allVars = getJSON('.env');
 		if (!fs.existsSync('docker-compose/secrets')) fs.mkdirSync('docker-compose/secrets');
 		Object.keys(allVars).forEach((k) => {
-			if (!fs.existsSync(`docker-compose/secrets/${k}`)) fs.appendFileSync(`docker-compose/secrets/${k}`, allVars[k]);
+			if (!fs.existsSync(`docker-compose/secrets/${k}`)) {
+				fs.appendFileSync(`docker-compose/secrets/${k}`, allVars[k]);
+			}
 		});
 
 		coloredLogs('Setup Finished', undefined, true);
@@ -160,7 +162,9 @@ function promptForMissingOptions(opts) {
 
 	return inquirer
 		.prompt(questions)
-		.then((ans) => questions.reduce((acc, cur) => Object.assign(opts, acc, { [cur.name]: ans[cur.name] }), {}));
+		.then((ans) =>
+			questions.reduce((acc, cur) => Object.assign(opts, acc, { [cur.name]: ans[cur.name] }), {}),
+		);
 }
 
 function getJSON(filePath, separate = '=') {
