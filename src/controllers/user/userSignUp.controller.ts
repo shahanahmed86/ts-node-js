@@ -26,7 +26,7 @@ type Result = {
 export const userSignUp: Controller<null, Args, Result> = async (root, args) => {
 	await joiValidator(userSignUpSchema, args);
 
-	const where: Prisma.SignUpWhereInput = includeDeleteParams({
+	const where = includeDeleteParams<Prisma.SignUpWhereInput>({
 		username: args.username,
 		type: 'LOCAL',
 	});

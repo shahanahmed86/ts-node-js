@@ -1,8 +1,8 @@
-import { FileArray, UploadedFile } from 'express-fileupload';
 import fs from 'fs';
 import path from 'path';
 import { convertUnknownIntoError, getUniqueId } from '../utils/logics.utils';
 import { NotFound } from '../utils/errors.utils';
+import { IFileArray } from '../types/extends.types';
 
 class File {
 	path = './uploads';
@@ -11,8 +11,8 @@ class File {
 		return getUniqueId();
 	}
 
-	async localUpload(image: FileArray): Promise<string> {
-		const imageFile = image.uploadedFile as UploadedFile;
+	async localUpload(image: IFileArray): Promise<string> {
+		const imageFile = image.uploadedFile;
 		const filename = `${this.uuid}-${imageFile.name}`;
 
 		if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);

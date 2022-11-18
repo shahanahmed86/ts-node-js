@@ -5,6 +5,8 @@ import fileUpload from 'express-fileupload';
 import { notFound } from './middleware/errors.middleware';
 import routes from './routes';
 import { logger } from '../library';
+import { IN_PROD } from '../config/app.config';
+import swagger from '../library/swagger.library';
 
 // initiate express app;
 const app = express();
@@ -24,6 +26,9 @@ app.use(logger);
 
 // x-powered-by
 app.disable('x-powered-by');
+
+// swagger
+if (!IN_PROD) swagger(app);
 
 // routings
 app.use('/api', routes);

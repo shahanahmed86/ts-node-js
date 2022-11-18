@@ -14,9 +14,9 @@ export const MORGAN_TOKENS: string = [
 	':error',
 ].join(' ');
 
-export const GENDER_OPTIONS: string[] = ['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'];
+export const GENDER_OPTIONS = ['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'];
 
-export const LOGIN_TYPES: string[] = ['LOCAL', 'FACEBOOK', 'GOOGLE'];
+export const LOGIN_TYPES = ['LOCAL', 'FACEBOOK', 'GOOGLE'];
 
 export const EXPIRES_IN_MILLISECONDS: number = JWT_EXPIRES;
 
